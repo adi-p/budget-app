@@ -16,6 +16,7 @@ class Item extends Component {
         }
         this.handleChange = this.handleChange.bind(this);
         this.onBlur = this.onBlur.bind(this);
+        this.onFocus = this.onFocus.bind(this);
     }
 
     handleChange(event) {
@@ -42,33 +43,33 @@ class Item extends Component {
 
     render() {
 
-        let nameComponent;
+        let nameElement;
         if (this.state.editingname) {
-            nameComponent = <input type="text" name={FIELDS.name} value={this.state.name} 
+            nameElement = <input type="text" name={FIELDS.name} value={this.state.name} 
                 onChange={this.handleChange}
                 onFocus={this.onFocus}
                 onBlur={this.onBlur}
             />;
         } else {
-            nameComponent = <div onClick={() => this.setState({ editingName: true })}>{this.state.name}</div>;
+            nameElement = <div onClick={() => this.setState({ editingName: true })}>{this.state.name}</div>;
         }
 
-        let valueComponent;
+        let valueElement;
         if (this.state.editingname) {
-            valueComponent = <input type="text" name={FIELDS.value} value={this.state.value} onChange={this.handleChange} 
+            valueElement = <input type="text" name={FIELDS.value} value={this.state.value} onChange={this.handleChange} 
                 onChange={this.handleChange}
                 onFocus={this.onFocus}
                 onBlur={this.onBlur}
             />;
         } else {
-            valueComponent = <div onClick={() => this.setState({ editingvalue: true })}>{this.state.value}</div>;
+            valueElement = <div onClick={() => this.setState({ editingvalue: true })}>{this.state.value}</div>;
         }
 
 
         return (
             <div>
-                {nameComponent}
-                {valueComponent}
+                {nameElement}
+                {valueElement}
             </div>
         );
     }
