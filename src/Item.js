@@ -56,7 +56,7 @@ class Item extends Component {
 
         let valueElement;
         if (this.state.editingname) {
-            valueElement = <input type="text" name={FIELDS.value} value={this.state.value} onChange={this.handleChange} 
+            valueElement = <input type="text" name={FIELDS.value} value={this.state.value}
                 onChange={this.handleChange}
                 onFocus={this.onFocus}
                 onBlur={this.onBlur}

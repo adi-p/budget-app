@@ -2,16 +2,16 @@ import React, { Component } from 'react';
 import Subpage from './Subpage';
 
 const TYPE = {
-    IN = 'in',
-    OUT = 'out'
+    IN: 'in',
+    OUT: 'out'
 }
 
 class Page extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            in: null,
-            out: null,
+            in: {},
+            out: {},
             total: 0,
         }
 
@@ -32,7 +32,10 @@ class Page extends Component {
         }
         const newPartialState = {
             ...this.state[subPageType],
-            [categoryName]: null,
+            [categoryName]: {
+                total: 0,
+                items: [],
+            },
         }
         this.setState({
             [subPageType]: newPartialState,
@@ -50,13 +53,22 @@ class Page extends Component {
             [categoryName]: [...subPageState[categoryName].items, item], //add item to category's items
         }
         this.setState({
-            [subPageType]: newPartialState
+            [subPageType]: newPartialState,
         });
     }
 
     //TODO:: need to figure out how this would work
     updateCategoryName(subPageType, oldCategoryName, newCategoryName) {
+        //temp implementation - consider if this is really the way we want to do this
+        //this assumes newCategoryName is not already a category
+        const newCatObj = { ...this.state[subPageType][oldCategoryName] };
+        let newPartialState = {
+            ...this.state[subPageType],
+            [newCategoryName]: newCatObj,
+        }
+        delete newPartialState[oldCategoryName];
 
+        this.setState(newPartialState);
     }
 
     //TODO:: need to figure out how this would work
@@ -66,7 +78,7 @@ class Page extends Component {
 
     removeCategory(subPageType, categoryName) {
         let newPartialState = {
-            ...this.state[subPageType]
+            ...this.state[subPageType],
         }
 
         delete newPartialState[categoryName];
@@ -91,10 +103,10 @@ class Page extends Component {
 
         return (
             <div>
-                <h1>{props.title}</h1>
+                <h1>{this.props.title}</h1>
                 {/* maybe these subpage could be build dynamically */}
                 <Subpage
-                    data={this.state[TYPE.OUT]}
+                    categories={this.state[TYPE.OUT]}
                     addCategory={(categoryName) => this.addCategory(TYPE.OUT, categoryName)}
                     addItem={(categoryName, item) => this.addItem(TYPE.OUT, categoryName, item)}
                     updateCategoryName={(oldCategoryName, newCategoryName) => 
@@ -104,7 +116,7 @@ class Page extends Component {
                     removeItem={(categoryName, item) => this.removeItem(TYPE.OUT, categoryName, item)}
                 />
                 <Subpage
-                    data={this.state[TYPE.IN]}
+                    categories={this.state[TYPE.IN]}
                     addCategory={(categoryName) => this.addCategory(TYPE.IN, categoryName)}
                     addItem={(categoryName, item) => this.addItem(TYPE.IN, categoryName, item)}
                     updateCategoryName={(oldCategoryName, newCategoryName) => 

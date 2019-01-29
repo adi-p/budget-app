@@ -8,25 +8,32 @@ class Subpage extends Component {
         this.state = {
             newCategory: null
         }
+        this.addCategory = this.addCategory.bind(this);
+    }
+
+    addCategory() {
+        const categoryCount = Object.keys(this.props.categories).length;
+        this.props.addCategory(`category${categoryCount + 1}`);
     }
 
     render() {
-
-        const categories = Object.keys(this.props.data).map(category => {
+        const categories = Object.keys(this.props.categories).map(category => {
             //TODO maybe add ordering at some point
             return (
                 <Category
                     name={category}
-                    items={this.props[category].items}
-                    total={this.props[category].total}
+                    items={this.props.categories[category].items}
+                    total={this.props.categories[category].total}
+                    updateCategoryName={this.props.updateCategoryName}
                 />
             );
-        })
+        });
+
 
         return (
             <div>
                 {categories}
-                <button>Add Category</button>
+                <button onClick={this.addCategory}>Add Category</button>
                 {/* add ability to add category */}
             </div>
         );

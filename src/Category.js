@@ -8,6 +8,7 @@ class Category extends Component {
             name: this.props.name,
             editingName: false,
         }
+        this.handleChange = this.handleChange.bind(this);
         this.updateItem = this.updateItem.bind(this);
         this.onBlur = this.onBlur.bind(this);
         this.onFocus = this.onFocus.bind(this);
@@ -18,11 +19,12 @@ class Category extends Component {
     }
 
     onBlur() {
+        const oldName = this.props.name;
+        const newName = this.state.name
         this.timeOutId = setTimeout(() => {
+            //need to check category name
             this.setState({ editingName: false },
-                () => this.props.updateCategoryName({
-                    name: this.state.name,
-                }));
+                () => this.props.updateCategoryName(oldName, newName));
         })
     }
 
