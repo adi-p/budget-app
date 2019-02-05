@@ -8,12 +8,16 @@ class Subpage extends Component {
         this.state = {
             newCategory: null
         }
+
+        this._idCounter = 0;
+
         this.addCategory = this.addCategory.bind(this);
     }
 
     addCategory() {
-        const categoryCount = Object.keys(this.props.categories).length;
-        this.props.addCategory(`category${categoryCount + 1}`);
+        //const categoryCount = Object.keys(this.props.categories).length;
+        this.props.addCategory(`category${this._idCounter}`);
+        this._idCounter++;
     }
 
     render() {

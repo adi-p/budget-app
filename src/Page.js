@@ -10,10 +10,17 @@ class Page extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            in: {},
-            out: {},
-            total: 0,
+            [TYPE.IN]: {
+                categories: []
+            },
+            [TYPE.OUT]: {
+                categories: []
+            }
         }
+
+        this[TYPE.IN]._idCounter = 0;
+        this[TYPE.OUT]._idCounter = 0;
+
 
         this.addCategory = this.addCategory.bind(this);
         this.addItem = this.addItem.bind(this);
@@ -25,20 +32,24 @@ class Page extends Component {
 
     ///add a new category to the subPage
     addCategory(subPageType, categoryName) {
-        const existingCategories = Object.keys(this.state[subPageType]);
+        const existingCategoriesNames = this.state[subPageType].categories.map(c => c.name);
         //maybe this check should be done at the subpage level?
-        if (existingCategories.includes(categoryName)) {
+        if (existingCategoriesNames.includes(categoryName)) {
             //error?
         }
-        const newPartialState = {
-            ...this.state[subPageType],
-            [categoryName]: {
-                total: 0,
-                items: [],
-            },
-        }
+
+        const newCategory = {
+            id: this[subPageType]._idCounter,
+            name: categoryName,
+            items: [],
+        };
+
+        const newCategories = his[subPageType].categories.concat(newCategory);
         this.setState({
-            [subPageType]: newPartialState,
+            [subPageType]: {
+                ...this.state[subPageType],
+                categories: newCategories
+            },
         });
     }
 
@@ -58,17 +69,18 @@ class Page extends Component {
     }
 
     //TODO:: need to figure out how this would work
-    updateCategoryName(subPageType, oldCategoryName, newCategoryName) {
+    updateCategoryName(subPageType, categoryId, newCategoryName) {
         //temp implementation - consider if this is really the way we want to do this
         //this assumes newCategoryName is not already a category
-        const newCatObj = { ...this.state[subPageType][oldCategoryName] };
+        let newCatObj = { ...this.state[subPageType].categories.find(c => c.id === categoryId) };
         let newPartialState = {
             ...this.state[subPageType],
             [newCategoryName]: newCatObj,
         }
         delete newPartialState[oldCategoryName];
 
-        this.setState(newPartialState);
+        this.setState(newPartialState,
+            () => console.log(this.state));
     }
 
     //TODO:: need to figure out how this would work
@@ -109,8 +121,8 @@ class Page extends Component {
                     categories={this.state[TYPE.OUT]}
                     addCategory={(categoryName) => this.addCategory(TYPE.OUT, categoryName)}
                     addItem={(categoryName, item) => this.addItem(TYPE.OUT, categoryName, item)}
-                    updateCategoryName={(oldCategoryName, newCategoryName) => 
-                        this.updateCategoryName(TYPE.OUT, oldCategoryName, newCategoryName) }
+                    updateCategoryName={(categoryId, newCategoryName) =>
+                        this.updateCategoryName(TYPE.OUT, categoryId, newCategoryName)}
                     updateItem={(categoryName, item) => this.updateItem(TYPE.OUT, categoryName, item)}
                     removeCategory={(categoryName) => this.removeCategory(TYPE.OUT, categoryName)}
                     removeItem={(categoryName, item) => this.removeItem(TYPE.OUT, categoryName, item)}
@@ -119,8 +131,8 @@ class Page extends Component {
                     categories={this.state[TYPE.IN]}
                     addCategory={(categoryName) => this.addCategory(TYPE.IN, categoryName)}
                     addItem={(categoryName, item) => this.addItem(TYPE.IN, categoryName, item)}
-                    updateCategoryName={(oldCategoryName, newCategoryName) => 
-                        this.updateCategoryName(TYPE.IN, oldCategoryName, newCategoryName) }
+                    updateCategoryName={(categoryId, newCategoryName) =>
+                        this.updateCategoryName(TYPE.IN, categoryId, newCategoryName)}
                     updateItem={(categoryName, item) => this.updateItem(TYPE.IN, categoryName, item)}
                     removeCategory={(categoryName) => this.removeCategory(TYPE.IN, categoryName)}
                     removeItem={(categoryName, item) => this.removeItem(TYPE.IN, categoryName, item)}

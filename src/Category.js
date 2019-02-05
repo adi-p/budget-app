@@ -19,12 +19,12 @@ class Category extends Component {
     }
 
     onBlur() {
-        const oldName = this.props.name;
+        const id = this.props.id;
         const newName = this.state.name
         this.timeOutId = setTimeout(() => {
             //need to check category name
             this.setState({ editingName: false },
-                () => this.props.updateCategoryName(oldName, newName));
+                () => this.props.updateCategoryName(id, newName));
         })
     }
 
@@ -42,7 +42,7 @@ class Category extends Component {
 
         let nameElement;
         if (this.state.editingName) {
-            nameElement = <input type="text" value={this.state.name} 
+            nameElement = <input type="text" value={this.state.name}
                 onChange={this.handleChange}
                 onFocus={this.onFocus}
                 onBlur={this.onBlur}
