@@ -25,6 +25,7 @@ class Subpage extends Component {
             //TODO maybe add ordering at some point
             return (
                 <Category
+                    key={category.id}
                     name={category}
                     items={this.props.categories[category].items}
                     total={this.props.categories[category].total}

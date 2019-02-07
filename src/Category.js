@@ -55,6 +55,7 @@ class Category extends Component {
             return (
                 <li>
                     <Item
+                        key={item.id}
                         id={item.id}
                         name={item.name}
                         value={item.value}
