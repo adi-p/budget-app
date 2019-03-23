@@ -9,8 +9,8 @@ class Item extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            name: this.props.name,
-            value: this.props.value,
+            name: this.props.name, //TODO: Consider one true source of data!
+            value: this.props.value, //^^
             editingname: false,
             editingvalue: false,
         }
@@ -51,11 +51,11 @@ class Item extends Component {
                 onBlur={this.onBlur}
             />;
         } else {
-            nameElement = <div onClick={() => this.setState({ editingName: true })}>{this.state.name}</div>;
+            nameElement = <div onClick={() => this.setState({ editingname: true })}>{this.state.name}</div>;
         }
 
         let valueElement;
-        if (this.state.editingname) {
+        if (this.state.editingvalue) {
             valueElement = <input type="text" name={FIELDS.value} value={this.state.value}
                 onChange={this.handleChange}
                 onFocus={this.onFocus}

@@ -3,7 +3,7 @@ import Subpage from './Subpage';
 
 const TYPE = {
     IN: 'in',
-    OUT: 'out'
+    OUT: 'out',
 }
 
 class Page extends Component {
@@ -14,15 +14,6 @@ class Page extends Component {
             [TYPE.OUT]: [],
         }
 
-        this[TYPE.IN] = {
-            _idCounter: 0
-        }
-
-        this[TYPE.OUT] = {
-            _idCounter: 0
-        }
-
-
         this.addCategory = this.addCategory.bind(this);
         this.addItem = this.addItem.bind(this);
         this.updateCategoryName = this.updateCategoryName.bind(this);
@@ -31,99 +22,109 @@ class Page extends Component {
         this.removeItem = this.removeItem.bind(this);
     }
 
-    ///add a new category to the subPage
-    addCategory(subPageType, categoryName) {
-        const newCategory = {
-            id: this[subPageType]._idCounter,
-            name: categoryName,
-            items: [],
-        };
-        this[subPageType]._idCounter++;
+    //TODO consider how to reduce overlap between most of these functions
 
-        this.setState({
-            [subPageType]: [...this.state[subPageType], newCategory],
-        },() => console.log(this.state));
+    ///add a new category to the subPage
+    addCategory(subPageType, newCategory) {
+        this.setState((prevState) => ({
+            [subPageType]: [...prevState[subPageType], newCategory],
+        }));
     }
 
     ///update category name
+    //TODO - Could we use this to update items?
     updateCategoryName(subPageType, categoryId, newCategoryName) {
-        const newCategories = this.state[subPageType].map(c => {
-            if (c.id === categoryId) {
-                c.name = newCategoryName;
-            }
-            return c;
-        });
+        this.setState((prevState) => {
+            const newCategories = prevState[subPageType].map(c => {
+                if (c.id === categoryId) {
+                    c.name = newCategoryName;
+                }
+                return c;
+            });
 
-        this.setState({
-            [subPageType]: newCategories,
-        },
-            () => console.log(this.state));
+            return { [subPageType]: newCategories, };
+        });
     }
 
     removeCategory(subPageType, categoryId) {
-        const newCategories = this.state[subPageType].filter(c => c.id !== categoryId);
+        this.setState((prevState) => {
+            const newCategories = prevState[subPageType].filter(c => c.id !== categoryId);
 
-        this.setState({
-            [subPageType]: newCategories,
-        },() => console.log(this.state));
+            return {
+                [subPageType]: newCategories,
+            };
+        });
     }
 
     addItem(subPageType, categoryId, item) {
-        const updatedCategories = this.state[subPageType].map(c => {
-            if (c.id === categoryId) {
-                c.items = c.items.concat(item);
-            }
-            return c;
-        });
+        this.setState((prevState) => {
+            const updatedCategories = prevState[subPageType].map(c => {
+                if (c.id === categoryId) {
+                    c.items = c.items.concat(item);
+                }
+                return c;
+            });
 
-        this.setState({
-            [subPageType]: updatedCategories,
+            return {
+                [subPageType]: updatedCategories,
+            };
         });
     }
 
-    //TODO:: need to figure out how this would work
-    updateItem(subPageType, categoryId, item) {
+    updateItem(subPageType, categoryId, updatedItem) {
+        this.setState((prevState) => {
+            const updatedCategories = prevState[subPageType].map(c => {
+                if (c.id === categoryId) {
+                    c.items = c.items.map(item => {
+                        if (item.id === updatedItem.id) {
+                            return updatedItem;
+                        }
+                        return item;
+                    });
+                }
+                return c;
+            });
 
+            return {
+                [subPageType]: updatedCategories,
+            };
+        });
     }
 
     removeItem(subPageType, categoryId, item) {
-        // //should create some kind of id for item per category?
-        // const subTypeState = this.state[subPageType]
-        // const newPartialState = {
-        //     ...subTypeState,
-        //     [categoryName]: [...subTypeState.items, item]
-        // }
-        // this.setState({
-        //     [subPageType]: newPartialState
-        // });
+        this.setState((prevState) => {
+            const updatedCategories = prevState[subPageType].map(c => {
+                if (c.id === categoryId) {
+                    c.items = c.items.filter(i => i.id !== item.id);
+                }
+                return c;
+            });
+
+            return {
+                [subPageType]: updatedCategories,
+            };
+        });
     }
 
     render() {
 
+        console.log(this.state);
         return (
             <div>
                 <h1>{this.props.title}</h1>
-                {/* maybe these subpage could be build dynamically */}
-                <Subpage
-                    categories={this.state[TYPE.OUT]}
-                    addCategory={(categoryName) => this.addCategory(TYPE.OUT, categoryName)}
-                    addItem={(categoryId, item) => this.addItem(TYPE.OUT, categoryId, item)}
-                    updateCategoryName={(categoryId, newCategoryName) =>
-                        this.updateCategoryName(TYPE.OUT, categoryId, newCategoryName)}
-                    updateItem={(categoryId, item) => this.updateItem(TYPE.OUT, categoryId, item)}
-                    removeCategory={(categoryId) => this.removeCategory(TYPE.OUT, categoryId)}
-                    removeItem={(categoryId, item) => this.removeItem(TYPE.OUT, categoryId, item)}
-                />
-                <Subpage
-                    categories={this.state[TYPE.IN]}
-                    addCategory={(categoryName) => this.addCategory(TYPE.IN, categoryName)}
-                    addItem={(categoryId, item) => this.addItem(TYPE.IN, categoryId, item)}
-                    updateCategoryName={(categoryId, newCategoryName) =>
-                        this.updateCategoryName(TYPE.IN, categoryId, newCategoryName)}
-                    updateItem={(categoryId, item) => this.updateItem(TYPE.IN, categoryId, item)}
-                    removeCategory={(categoryId) => this.removeCategory(TYPE.IN, categoryId)}
-                    removeItem={(categoryId, item) => this.removeItem(TYPE.IN, categoryId, item)}
-                />
+                {[TYPE.OUT, TYPE.IN].map(type => (
+                    <Subpage
+                        key={type}
+                        name={type}
+                        categories={this.state[type]}
+                        addCategory={(categoryName) => this.addCategory(type, categoryName)}
+                        addItem={(categoryId, item) => this.addItem(type, categoryId, item)}
+                        updateCategoryName={(categoryId, newCategoryName) =>
+                            this.updateCategoryName(type, categoryId, newCategoryName)}
+                        updateItem={(categoryId, item) => this.updateItem(type, categoryId, item)}
+                        removeCategory={(categoryId) => this.removeCategory(type, categoryId)}
+                        removeItem={(categoryId, item) => this.removeItem(type, categoryId, item)}
+                    />))}
                 TOTAL : ${this.state.total}
             </div>
         );

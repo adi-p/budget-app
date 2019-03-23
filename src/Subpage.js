@@ -9,27 +9,36 @@ class Subpage extends Component {
             newCategory: null
         }
 
-        this._idCounter = 0;
+        this.idCounter = 0;
 
         this.addCategory = this.addCategory.bind(this);
     }
 
     addCategory() {
-        //const categoryCount = Object.keys(this.props.categories).length;
-        this.props.addCategory(`category${this._idCounter}`);
-        this._idCounter++;
+        const newCategory = {
+            id: this.idCounter,
+            name: `category${this.idCounter}`,
+            items: [],
+        };
+        this.props.addCategory(newCategory);
+        this.idCounter++;
     }
 
     render() {
-        const categories = Object.keys(this.props.categories).map(category => {
+        const categories = this.props.categories.map(category => {
             //TODO maybe add ordering at some point
             return (
                 <Category
                     key={category.id}
-                    name={category}
-                    items={this.props.categories[category].items}
-                    total={this.props.categories[category].total}
-                    updateCategoryName={this.props.updateCategoryName}
+                    name={category.name}
+                    items={category.items}
+                    total={category.total}
+                    updateCategoryName={(newName) => this.props.updateCategoryName(category.id, newName)}
+                    removeCategory={() => this.props.removeCategory(category.id)}
+                    addItem={(item) => this.props.addItem(category.id, item)}
+                    updateItem={(item) => this.props.updateItem(category.id, item)}
+                    removeItem={(item) => this.props.removeItem(category.id, item)}
+
                 />
             );
         });
@@ -37,9 +46,9 @@ class Subpage extends Component {
 
         return (
             <div>
+                <h1>{this.props.name}</h1>
                 {categories}
                 <button onClick={this.addCategory}>Add Category</button>
-                {/* add ability to add category */}
             </div>
         );
     }
