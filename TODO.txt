@@ -1,0 +1,9 @@
+FOR SURE
+- Use string ressources
+- styling
+- change README.md to relevent have info
+
+MAYBE
+- add back end
+    - if this ever gets done, logic with ID will need to be looked at again
+- use redux
