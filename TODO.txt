@@ -1,9 +1,11 @@
 FOR SURE
 - Use string ressources
 - styling
-- change README.md to relevent have info
+- change README.md to have relevant info
+- add a side bar (choose page to edit)
 
 MAYBE
 - add back end
     - if this ever gets done, logic with ID will need to be looked at again
+    - add saving capability
 - use redux

@@ -1,0 +1,8 @@
+.categoryName { 
+    color: #A9A9A9;
+    font-size: 20px;
+  } 
+  
+  .deleteButton {
+      float: right;
+  }

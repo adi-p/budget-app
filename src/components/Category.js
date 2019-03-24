@@ -65,14 +65,14 @@ class Category extends Component {
                 onBlur={this.onBlur}
             />;
         } else {
-            nameElement = <span onClick={() => this.setState({ editingName: true })}>{this.props.name}</span>;
+            nameElement = <h3 className='categoryName' onClick={() => this.setState({ editingName: true })}>{this.props.name}</h3>;
         }
 
         const items = this.props.items.map(item => {
             return (
-                <li>
+                <li
+                    key={item.id}>
                     <Item
-                        key={item.id}
                         id={item.id}
                         name={item.name}
                         value={item.value}
@@ -84,11 +84,8 @@ class Category extends Component {
 
         return (
             <div>
-                {/* maybe this should be a header*/}
-                <div>
-                    {nameElement}
-                    <button onClick={() => this.props.removeCategory()}>Trash</button>
-                </div>
+                {nameElement}
+                <button className='deleteButton' onClick={() => this.props.removeCategory()}>Trash</button>
                 <ul>
                     {items}
                     <button onClick={this.addItem}>Add Item</button>

@@ -46,10 +46,13 @@ class Subpage extends Component {
 
 
         return (
-            <div>
-                <h1>{this.props.name}</h1>
-                {categories}
-                <button onClick={this.addCategory}>Add Category</button>
+            <div className='subpage'>
+                <h1 className='subpageHeader'>{this.props.name}</h1>
+                <div>
+                    {categories}
+                    <button onClick={this.addCategory}>Add Category</button>
+                </div>
+                <hr />
             </div>
         );
     }

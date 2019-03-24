@@ -111,12 +111,12 @@ class Page extends Component {
 
         console.log(this.state);
         return (
-            <div>
-                <h1>{this.props.title}</h1>
+            <div className='column middle'>
+                <h1 className='pageHeader'>{this.props.title}</h1>
                 {[TYPE.OUT, TYPE.IN].map(type => (
                     <Subpage
                         key={type}
-                        name={type}
+                        name={type ===  TYPE.IN ? 'Money in' : 'Money out'} //temporary
                         categories={this.state[type]}
                         addCategory={(categoryName) => this.addCategory(type, categoryName)}
                         addItem={(categoryId, item) => this.addItem(type, categoryId, item)}
@@ -126,7 +126,8 @@ class Page extends Component {
                         removeCategory={(categoryId) => this.removeCategory(type, categoryId)}
                         removeItem={(categoryId, item) => this.removeItem(type, categoryId, item)}
                     />))}
-                TOTAL : ${this.state.total}
+                    {/* TODO: total should be calculated at render - use function */}
+                TOTAL : ${this.state.total} 
             </div>
         );
     }
