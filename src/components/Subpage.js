@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Category from './Category';
+import './Subpage.css';
 
 
 class Subpage extends Component {

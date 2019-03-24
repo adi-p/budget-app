@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Subpage from './Subpage';
+import './Page.css';
 
 const TYPE = {
     IN: 'in',
