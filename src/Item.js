@@ -9,8 +9,6 @@ class Item extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            name: this.props.name, //TODO: Consider one true source of data!
-            value: this.props.value, //^^
             editingname: false,
             editingvalue: false,
         }
@@ -20,23 +18,26 @@ class Item extends Component {
     }
 
     handleChange(event) {
-        this.setState({ [event.target.name]: event.target.value });
-    }
-
-    onBlur(event) {
-        this.timeOutId = setTimeout(() => {
-            const fieldName = `editing${event.target.name}`;
-            this.setState({ [fieldName]: false },
-                () => this.props.updateItem({
-                    id: this.props.id,
-                    name: this.state.name,
-                    value: this.state.value,
-                }));
+        const currentItem = {
+            id: this.props.id,
+            name: this.props.name,
+            value: this.props.value,
+        };
+        this.props.updateItem({
+            ...currentItem,
+            [event.target.name]: event.target.value
         })
     }
 
+    onBlur(event) {
+        // this.timeOutId = setTimeout(() => {
+            const fieldName = `editing${event.target.name}`;
+            this.setState({ [fieldName]: false });
+        // })
+    }
+
     onFocus() {
-        clearTimeout(this.timeOutId);
+        // clearTimeout(this.timeOutId);
     }
 
 
@@ -45,24 +46,24 @@ class Item extends Component {
 
         let nameElement;
         if (this.state.editingname) {
-            nameElement = <input type="text" name={FIELDS.name} value={this.state.name} 
+            nameElement = <input type="text" name={FIELDS.name} value={this.props.name} 
                 onChange={this.handleChange}
                 onFocus={this.onFocus}
                 onBlur={this.onBlur}
             />;
         } else {
-            nameElement = <div onClick={() => this.setState({ editingname: true })}>{this.state.name}</div>;
+            nameElement = <div onClick={() => this.setState({ editingname: true })}>{this.props.name}</div>;
         }
 
         let valueElement;
         if (this.state.editingvalue) {
-            valueElement = <input type="text" name={FIELDS.value} value={this.state.value}
+            valueElement = <input type="text" name={FIELDS.value} value={this.props.value}
                 onChange={this.handleChange}
                 onFocus={this.onFocus}
                 onBlur={this.onBlur}
             />;
         } else {
-            valueElement = <div onClick={() => this.setState({ editingvalue: true })}>{this.state.value}</div>;
+            valueElement = <div onClick={() => this.setState({ editingvalue: true })}>{this.props.value}</div>;
         }
 
 
