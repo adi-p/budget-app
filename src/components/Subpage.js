@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import Category from './Category';
 import './Subpage.css';
 
+import { sumItems } from '../util/helpers';
+
 
 class Subpage extends Component {
     constructor(props) {
@@ -13,6 +15,7 @@ class Subpage extends Component {
         this.idCounter = 0;
 
         this.addCategory = this.addCategory.bind(this);
+        this.calculateTotal = this.calculateTotal.bind(this);
     }
 
     addCategory() {
@@ -23,6 +26,12 @@ class Subpage extends Component {
         };
         this.props.addCategory(newCategory);
         this.idCounter++;
+    }
+
+    calculateTotal() {
+        return this.props.categories.reduce((acc, currentCategory) => {
+            return acc + sumItems(currentCategory.items);
+        }, 0);
     }
 
     render() {
@@ -53,6 +62,7 @@ class Subpage extends Component {
                     <button onClick={this.addCategory}>Add Category</button>
                 </div>
                 <hr />
+                <span>Subtotal: {this.calculateTotal()}</span>
             </div>
         );
     }

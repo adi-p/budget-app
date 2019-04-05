@@ -14,8 +14,9 @@ class Item extends Component {
             editingvalue: false,
         }
         this.handleChange = this.handleChange.bind(this);
+        this.handleValueChange = this.handleValueChange.bind(this);
         this.onBlur = this.onBlur.bind(this);
-        this.onFocus = this.onFocus.bind(this);
+        this.onValueFocus = this.onValueFocus.bind(this);
     }
 
     handleChange(event) {
@@ -24,21 +25,39 @@ class Item extends Component {
             name: this.props.name,
             value: this.props.value,
         };
+
         this.props.updateItem({
             ...currentItem,
-            [event.target.name]: event.target.value
+            [event.target.name]: event.target.value,
         })
+
+    }
+
+    handleValueChange(event) {
+        const value = Number(event.target.value);
+
+        if (!isNaN(value)) {
+            this.props.updateItem({
+                id: this.props.id,
+                name: this.props.name,
+                [FIELDS.value]: value,
+            })
+        }
     }
 
     onBlur(event) {
         // this.timeOutId = setTimeout(() => {
-            const fieldName = `editing${event.target.name}`;
-            this.setState({ [fieldName]: false });
+        const fieldName = `editing${event.target.name}`;
+        this.setState({ [fieldName]: false });
         // })
     }
 
-    onFocus() {
+    onValueFocus(event) {
         // clearTimeout(this.timeOutId);
+        // select text in textbox so 0 can get overwitten
+        if (this.props.value === 0) {
+            event.target.select();
+        }
     }
 
 
@@ -47,9 +66,8 @@ class Item extends Component {
 
         let nameElement;
         if (this.state.editingname) {
-            nameElement = <input type="text" name={FIELDS.name} value={this.props.name} 
+            nameElement = <input type="text" name={FIELDS.name} value={this.props.name}
                 onChange={this.handleChange}
-                onFocus={this.onFocus}
                 onBlur={this.onBlur}
             />;
         } else {
@@ -58,9 +76,10 @@ class Item extends Component {
 
         let valueElement;
         if (this.state.editingvalue) {
+
             valueElement = <input type="text" name={FIELDS.value} value={this.props.value}
-                onChange={this.handleChange}
-                onFocus={this.onFocus}
+                onChange={this.handleValueChange}
+                onFocus={this.onValueFocus}
                 onBlur={this.onBlur}
             />;
         } else {

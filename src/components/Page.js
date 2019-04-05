@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Subpage from './Subpage';
 import './Page.css';
+import { sumItems } from '../util/helpers';
 
 const TYPE = {
     IN: 'in',
@@ -15,12 +16,16 @@ class Page extends Component {
             [TYPE.OUT]: [],
         }
 
+        //*** Update category/items ***//
         this.addCategory = this.addCategory.bind(this);
         this.addItem = this.addItem.bind(this);
         this.updateCategoryName = this.updateCategoryName.bind(this);
         this.updateItem = this.updateItem.bind(this);
         this.removeCategory = this.removeCategory.bind(this);
         this.removeItem = this.removeItem.bind(this);
+
+        //*** Util ***//
+        this.calculateTotal = this.calculateTotal.bind(this);
     }
 
     //TODO consider how to reduce overlap between most of these functions
@@ -107,6 +112,18 @@ class Page extends Component {
         });
     }
 
+    calculateTotal() {
+        let subPageTotals = {};
+        [TYPE.OUT, TYPE.IN]
+            .forEach(type => {
+                const typeValue = this.state[type].reduce((acc, currentCategory) => {
+                    return acc + sumItems(currentCategory.items);
+                }, 0);
+                subPageTotals[type] = typeValue;
+            });
+        return subPageTotals[TYPE.IN] - subPageTotals[TYPE.OUT];
+    }
+
     render() {
 
         console.log(this.state);
@@ -116,7 +133,7 @@ class Page extends Component {
                 {[TYPE.OUT, TYPE.IN].map(type => (
                     <Subpage
                         key={type}
-                        name={type ===  TYPE.IN ? 'Money in' : 'Money out'} //temporary
+                        name={type === TYPE.IN ? 'Money in' : 'Money out'} //temporary
                         categories={this.state[type]}
                         addCategory={(categoryName) => this.addCategory(type, categoryName)}
                         addItem={(categoryId, item) => this.addItem(type, categoryId, item)}
@@ -126,8 +143,7 @@ class Page extends Component {
                         removeCategory={(categoryId) => this.removeCategory(type, categoryId)}
                         removeItem={(categoryId, item) => this.removeItem(type, categoryId, item)}
                     />))}
-                    {/* TODO: total should be calculated at render - use function */}
-                TOTAL : ${this.state.total} 
+                TOTAL : ${this.calculateTotal()}
             </div>
         );
     }

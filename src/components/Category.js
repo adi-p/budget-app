@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Item from './Item';
 import './Category.css';
+import { sumItems } from '../util/helpers';
 
 class Category extends Component {
     constructor(props) {
@@ -90,6 +91,7 @@ class Category extends Component {
                     {items}
                     <button onClick={this.addItem}>Add Item</button>
                 </ul>
+                Category Total : {sumItems(this.props.items)}
             </div>
         );
     }
