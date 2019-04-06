@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import Item from './Item';
 import OutsideClick from './utilityComponents/OutsideClick';
 
 import './Category.css';
 import { sumItems } from '../util/helpers';
+
 
 class Category extends Component {
     constructor(props) {
@@ -99,6 +101,17 @@ class Category extends Component {
             </div>
         );
     }
+}
+
+Category.propTypes = {
+    // id: PropTypes.oneOfType([
+    //     PropTypes.string,
+    //     PropTypes.number,
+    // ]).isRequired,
+    name: PropTypes.string.isRequired,
+    items: PropTypes.array, //maybe add format at some point
+    //add functions
+
 }
 
 export default Category;

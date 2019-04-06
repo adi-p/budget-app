@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import Category from './Category';
 import './Subpage.css';
 
@@ -21,7 +22,7 @@ class Subpage extends Component {
     addCategory() {
         const newCategory = {
             id: this.idCounter,
-            name: `category${this.idCounter}`,
+            name: `category${this.idCounter}`, //do we need a temporary name?
             items: [],
         };
         this.props.addCategory(newCategory);
@@ -66,6 +67,10 @@ class Subpage extends Component {
             </div>
         );
     }
+}
+Category.propTypes = {
+    categories: PropTypes.array, //maybe add format at some point
+    //add functions
 }
 
 export default Subpage;

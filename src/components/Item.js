@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import OutsideClick from './utilityComponents/OutsideClick';
 import './Item.css';
+
 
 const FIELDS = {
     name: "name",
@@ -89,6 +91,15 @@ class Item extends Component {
             </OutsideClick>
         );
     }
+}
+
+Item.propTypes = {
+    id: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number,
+    ]).isRequired,
+    name: PropTypes.string.isRequired,
+    value: PropTypes.number.isRequired,
 }
 
 export default Item;
