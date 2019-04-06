@@ -4,7 +4,8 @@ FOR SURE
 - change README.md to have relevant info
 - add a side bar (choose page to edit)
 - make textbox its own component?
-- add proptypes
+- add proptypes - half done
+- add tests
 
 MAYBE
 - add back end
