@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import OutsideClick from './utilityComponents/OutsideClick';
 import './Item.css';
 
 const FIELDS = {
@@ -10,12 +11,11 @@ class Item extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            editingname: false,
-            editingvalue: false,
+            editing: true,
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleValueChange = this.handleValueChange.bind(this);
-        this.onBlur = this.onBlur.bind(this);
+        this.handleKeyPress = this.handleKeyPress.bind(this);
         this.onValueFocus = this.onValueFocus.bind(this);
     }
 
@@ -45,15 +45,13 @@ class Item extends Component {
         }
     }
 
-    onBlur(event) {
-        // this.timeOutId = setTimeout(() => {
-        const fieldName = `editing${event.target.name}`;
-        this.setState({ [fieldName]: false });
-        // })
+    handleKeyPress(event) {
+        if (event.key === 'Enter') {
+            this.setState({ editing: false })
+        }
     }
 
     onValueFocus(event) {
-        // clearTimeout(this.timeOutId);
         // select text in textbox so 0 can get overwitten
         if (this.props.value === 0) {
             event.target.select();
@@ -65,33 +63,30 @@ class Item extends Component {
     render() {
 
         let nameElement;
-        if (this.state.editingname) {
-            nameElement = <input type="text" name={FIELDS.name} value={this.props.name}
-                onChange={this.handleChange}
-                onBlur={this.onBlur}
-            />;
-        } else {
-            nameElement = <div onClick={() => this.setState({ editingname: true })}>{this.props.name}</div>;
-        }
-
         let valueElement;
-        if (this.state.editingvalue) {
-
-            valueElement = <input type="text" name={FIELDS.value} value={this.props.value}
+        if (this.state.editing) {
+            nameElement = (<input type="text" name={FIELDS.name} value={this.props.name}
+                onChange={this.handleChange}
+                onKeyPress={this.handleKeyPress}
+            />);
+            valueElement = (<input type="text" name={FIELDS.value} value={this.props.value}
                 onChange={this.handleValueChange}
+                onKeyPress={this.handleKeyPress}
                 onFocus={this.onValueFocus}
-                onBlur={this.onBlur}
-            />;
+            />);
         } else {
-            valueElement = <div onClick={() => this.setState({ editingvalue: true })}>{this.props.value}</div>;
+            // try and inline these elements
+            nameElement = <div className='editableDiv' onClick={() => this.setState({ editing: true })}>{this.props.name}</div>;
+            valueElement = <div className='editableDiv' onClick={() => this.setState({ editing: true })}>{this.props.value}</div>;
         }
 
 
         return (
-            <div>
+            <OutsideClick outsideClickCallback={() => this.setState({ editing: false })}
+                onClick={() => this.setState({ editing: true })}>
                 {nameElement}
                 {valueElement}
-            </div>
+            </OutsideClick>
         );
     }
 }

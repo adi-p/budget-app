@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import Item from './Item';
+import OutsideClick from './utilityComponents/OutsideClick';
+
 import './Category.css';
 import { sumItems } from '../util/helpers';
 
@@ -7,16 +9,15 @@ class Category extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            editingName: false,
+            editing: true,
             newItemName: '',
         }
 
         this.idCounter = 0;
 
         this.handleChange = this.handleChange.bind(this);
-        this.updateItem = this.updateItem.bind(this);
-        this.onBlur = this.onBlur.bind(this);
-        this.onFocus = this.onFocus.bind(this);
+        this.handleKeyPress = this.handleKeyPress.bind(this);
+        this.setEdit = this.setEdit.bind(this);
 
         this.addItem = this.addItem.bind(this);
         this.updateItem = this.updateItem.bind(this);
@@ -27,17 +28,16 @@ class Category extends Component {
         this.props.updateCategoryName(event.target.value)
     }
 
-    onBlur() {
-        // this.timeOutId = setTimeout(() => {
-        //need to check category name
-        this.setState({ editingName: false });
-        // })
+    handleKeyPress(event) {
+        if(event.key === 'Enter') {
+            this.setEdit(false);
+        }
     }
 
-    onFocus() {
-        // clearTimeout(this.timeOutId);
-        this.setState({ editingName: true });
+    setEdit(value) {
+        this.setState({ editing: value });
     }
+
 
     //** ITEM FUNCTIONS **/
 
@@ -59,14 +59,14 @@ class Category extends Component {
 
     render() {
         let nameElement;
-        if (this.state.editingName || !this.props.name) {
-            nameElement = <input type="text" value={this.props.name} placeholder='Category Name'
+        if (this.state.editing || !this.props.name) {
+            nameElement = (<input type="text" value={this.props.name} placeholder='Category Name'
                 onChange={this.handleChange}
-                onFocus={this.onFocus}
-                onBlur={this.onBlur}
-            />;
+                onKeyPress={this.handleKeyPress}
+            />);
         } else {
-            nameElement = <h3 className='categoryName' onClick={() => this.setState({ editingName: true })}>{this.props.name}</h3>;
+            const displayName = this.props.name || 'Category Name';
+            nameElement = <h3 className='categoryName editableDiv' onClick={() => this.setEdit(true)}>{displayName}</h3>;
         }
 
         const items = this.props.items.map(item => {
@@ -85,7 +85,11 @@ class Category extends Component {
 
         return (
             <div>
-                {nameElement}
+                {/* Need to inline name and trash button */}
+                <OutsideClick outsideClickCallback={() => this.setEdit(false)}
+                    onClick={() => this.setEdit(true)}>
+                    {nameElement}
+                </OutsideClick>
                 <button className='deleteButton' onClick={() => this.props.removeCategory()}>Trash</button>
                 <ul>
                     {items}
