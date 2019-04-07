@@ -16,7 +16,6 @@ class Item extends Component {
             editing: true,
         }
         this.handleChange = this.handleChange.bind(this);
-        this.handleValueChange = this.handleValueChange.bind(this);
         this.handleKeyPress = this.handleKeyPress.bind(this);
         this.onValueFocus = this.onValueFocus.bind(this);
     }
@@ -33,18 +32,6 @@ class Item extends Component {
             [event.target.name]: event.target.value,
         })
 
-    }
-
-    handleValueChange(event) {
-        const value = Number(event.target.value);
-
-        if (!isNaN(value)) {
-            this.props.updateItem({
-                id: this.props.id,
-                name: this.props.name,
-                [FIELDS.value]: value,
-            })
-        }
     }
 
     handleKeyPress(event) {
@@ -72,22 +59,21 @@ class Item extends Component {
                 onKeyPress={this.handleKeyPress}
             />);
             valueElement = (<input type="text" name={FIELDS.value} value={this.props.value}
-                onChange={this.handleValueChange}
+                onChange={this.handleChange}
                 onKeyPress={this.handleKeyPress}
                 onFocus={this.onValueFocus}
             />);
         } else {
             // try and inline these elements
-            nameElement = <div className='editableDiv' onClick={() => this.setState({ editing: true })}>{this.props.name}</div>;
-            valueElement = <div className='editableDiv' onClick={() => this.setState({ editing: true })}>{this.props.value}</div>;
+            nameElement = <div className='editableDiv itemName' onClick={() => this.setState({ editing: true })}>{this.props.name}</div>;
+            valueElement = <div className='editableDiv itemValue' onClick={() => this.setState({ editing: true })}>${this.props.value}</div>;
         }
 
 
         return (
-            <OutsideClick outsideClickCallback={() => this.setState({ editing: false })}
+            <OutsideClick outsideClickCallback={() => this.setState({ editing: false })} //maybe validate fields on exit (especially value)
                 onClick={() => this.setState({ editing: true })}>
-                {nameElement}
-                {valueElement}
+                {nameElement} : {valueElement}
             </OutsideClick>
         );
     }
@@ -99,7 +85,10 @@ Item.propTypes = {
         PropTypes.number,
     ]).isRequired,
     name: PropTypes.string.isRequired,
-    value: PropTypes.number.isRequired,
+    value: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number,
+    ]).isRequired,
 }
 
 export default Item;

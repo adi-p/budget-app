@@ -31,7 +31,7 @@ class Subpage extends Component {
 
     calculateTotal() {
         return this.props.categories.reduce((acc, currentCategory) => {
-            return acc + sumItems(currentCategory.items);
+            return Number(acc + sumItems(currentCategory.items));
         }, 0);
     }
 
@@ -63,7 +63,7 @@ class Subpage extends Component {
                     <button onClick={this.addCategory}>Add Category</button>
                 </div>
                 <hr />
-                <span>Subtotal: {this.calculateTotal()}</span>
+                <span>Subtotal: ${this.calculateTotal()}</span>
             </div>
         );
     }

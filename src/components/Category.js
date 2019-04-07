@@ -31,7 +31,7 @@ class Category extends Component {
     }
 
     handleKeyPress(event) {
-        if(event.key === 'Enter') {
+        if (event.key === 'Enter') {
             this.setEdit(false);
         }
     }
@@ -44,7 +44,7 @@ class Category extends Component {
     //** ITEM FUNCTIONS **/
 
     addItem() {
-        const item = { id: this.idCounter, name: `item${this.idCounter}`, value: 0 };
+        const item = { id: this.idCounter, name: `item${this.idCounter}`, value: 0 }; //Do we need a temporary name?
         this.props.addItem(item);
         this.idCounter++;
     }
@@ -88,7 +88,8 @@ class Category extends Component {
         return (
             <div>
                 {/* Need to inline name and trash button */}
-                <OutsideClick outsideClickCallback={() => this.setEdit(false)}
+                <OutsideClick className='categoryNameWrapper'
+                    outsideClickCallback={() => this.setEdit(false)}
                     onClick={() => this.setEdit(true)}>
                     {nameElement}
                 </OutsideClick>
@@ -97,7 +98,7 @@ class Category extends Component {
                     {items}
                     <button onClick={this.addItem}>Add Item</button>
                 </ul>
-                Category Total : {sumItems(this.props.items)}
+                Category Total : ${sumItems(this.props.items)}
             </div>
         );
     }

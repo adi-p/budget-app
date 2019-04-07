@@ -1,14 +1,29 @@
 FOR SURE
-- Use string ressources
+- Use string ressources - Internationalization? Currency?
 - styling
+    - add trash button to items
+    - make action buttons icons -> on hover? or ... ? 
+        - I think ... is better
+    - get better colours
+    - better item list
+
 - change README.md to have relevant info
-- add a side bar (choose page to edit)
 - make textbox its own component?
 - add proptypes - half done
-- add tests
+- better linting
+- 
+
 
 MAYBE
 - add back end
+    - Typescript?
     - if this ever gets done, logic with ID will need to be looked at again
     - add saving capability
+- add a side bar (choose page to edit) -> only make sense with a backend
+- field validation? like for value is a number and name isn't empty
+- add dates to items? -> is that useful?
+
+- add tests -> front end and back end
 - use redux
+
+- get own jira board to replace this file

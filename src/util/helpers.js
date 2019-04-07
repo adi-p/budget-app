@@ -1,7 +1,11 @@
 
 const sumItems = (items) => {
     return items.reduce((acc, currentItem) => {
-        return acc + currentItem.value;
+
+        if(isNaN(Number(currentItem.value)))
+            return acc;
+            
+        return Number(acc + currentItem.value);
     }, 0);
 }
 

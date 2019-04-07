@@ -3,6 +3,6 @@
     font-size: 20px;
   } 
   
-  .deleteButton {
-      float: right;
+  .categoryNameWrapper ,  .deleteButton {
+      display: inline-flex;
   }
