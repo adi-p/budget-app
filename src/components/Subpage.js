@@ -9,9 +9,6 @@ import { sumItems } from '../util/helpers';
 class Subpage extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            newCategory: null
-        }
 
         this.idCounter = 0;
 
