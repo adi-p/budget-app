@@ -66,8 +66,15 @@ class Subpage extends Component {
     }
 }
 Category.propTypes = {
+    name: PropTypes.string,
     categories: PropTypes.array, //maybe add format at some point
-    //add functions
+    //functions
+    addCategory: PropTypes.func.isRequired,
+    updateCategoryName: PropTypes.func.isRequired,
+    removeCategory: PropTypes.func.isRequired,
+    addItem: PropTypes.func.isRequired,
+    updateItem: PropTypes.func.isRequired,
+    removeItem: PropTypes.func.isRequired,
 }
 
 export default Subpage;

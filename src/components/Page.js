@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import Subpage from './Subpage';
 import './Page.css';
 import { sumItems } from '../util/helpers';
@@ -147,6 +148,10 @@ class Page extends Component {
             </div>
         );
     }
+}
+
+Page.PropTypes = {
+    title: PropTypes.string,
 }
 
 export default Page;

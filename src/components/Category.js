@@ -111,7 +111,13 @@ Category.propTypes = {
     // ]).isRequired,
     name: PropTypes.string.isRequired,
     items: PropTypes.array, //maybe add format at some point
-    //add functions
+
+    //functions
+    updateCategoryName: PropTypes.func.isRequired,
+    removeCategory: PropTypes.func.isRequired,
+    addItem: PropTypes.func.isRequired,
+    updateItem: PropTypes.func.isRequired,
+    removeItem: PropTypes.func.isRequired,
 
 }
 

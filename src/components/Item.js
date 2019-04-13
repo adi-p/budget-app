@@ -89,6 +89,9 @@ Item.propTypes = {
         PropTypes.string,
         PropTypes.number,
     ]).isRequired,
+
+    updateItem: PropTypes.func.isRequired,
+    
 }
 
 export default Item;
