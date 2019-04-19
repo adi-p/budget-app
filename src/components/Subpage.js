@@ -65,7 +65,7 @@ class Subpage extends Component {
         );
     }
 }
-Category.propTypes = {
+Subpage.propTypes = {
     name: PropTypes.string,
     categories: PropTypes.array, //maybe add format at some point
     //functions

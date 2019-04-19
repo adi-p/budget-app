@@ -150,7 +150,7 @@ class Page extends Component {
     }
 }
 
-Page.PropTypes = {
+Page.propTypes = {
     title: PropTypes.string,
 }
 

@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';
 import Item from './Item';
 import OutsideClick from './utilityComponents/OutsideClick';
 
 import './Category.css';
+import "./utilityComponents/Lib";
 import { sumItems } from '../util/helpers';
 
 
@@ -22,8 +24,6 @@ class Category extends Component {
         this.setEdit = this.setEdit.bind(this);
 
         this.addItem = this.addItem.bind(this);
-        this.updateItem = this.updateItem.bind(this);
-        this.removeItem = this.removeItem.bind(this);
     }
 
     handleChange(event) {
@@ -49,17 +49,10 @@ class Category extends Component {
         this.idCounter++;
     }
 
-    updateItem(item) {
-        this.props.updateItem(item);
-    }
-
-    removeItem(item) {
-        this.props.removeItem(item);
-    }
-
-
-
     render() {
+
+        const { updateItem, removeItem } = this.props;
+
         let nameElement;
         if (this.state.editing || !this.props.name) {
             nameElement = (<input type="text" value={this.props.name} placeholder='Category Name'
@@ -79,7 +72,8 @@ class Category extends Component {
                         id={item.id}
                         name={item.name}
                         value={item.value}
-                        updateItem={this.updateItem}
+                        updateItem={updateItem}
+                        removeItem={() => removeItem(item)}
                     />
                 </li>
             );
@@ -91,9 +85,10 @@ class Category extends Component {
                 <OutsideClick className='categoryNameWrapper'
                     outsideClickCallback={() => this.setEdit(false)}
                     onClick={() => this.setEdit(true)}>
-                    {nameElement}
+                    {nameElement}   
                 </OutsideClick>
-                <button className='deleteButton' onClick={() => this.props.removeCategory()}>Trash</button>
+                <FontAwesomeIcon className='deleteButton' title='delete'
+                    onClick={() => this.props.removeCategory()} icon='times' /> { /*//x icon //maybe use trash can */}
                 <ul>
                     {items}
                     <button onClick={this.addItem}>Add Item</button>

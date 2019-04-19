@@ -28,8 +28,10 @@ body {
     flex: 2;
   }
 
-  .editableDiv:hover {
-    border: 2px solid darkgray;
+  .editableWrapper:hover {
+    border: 1px dotted darkgray;
+    /* background-color: #efefef5b; */
+    cursor: pointer;
   }
 /*   
   .footer {
