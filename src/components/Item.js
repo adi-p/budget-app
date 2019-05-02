@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';
 import OutsideClick from './utilityComponents/OutsideClick';
 import "./utilityComponents/Lib";
 import './Item.css';
 
+import { getItemById } from '../redux/selectors'
+import { updateItem } from '../redux/actions';
 
 const FIELDS = {
     name: "name",
@@ -18,6 +21,7 @@ class Item extends Component {
             editing: true,
         }
         this.handleChange = this.handleChange.bind(this);
+        this.handleRemoveItem = this.handleRemoveItem.bind(this);
         this.handleKeyPress = this.handleKeyPress.bind(this);
         this.onValueFocus = this.onValueFocus.bind(this);
 
@@ -27,17 +31,18 @@ class Item extends Component {
     }
 
     handleChange(event) {
-        const currentItem = {
-            id: this.props.id,
-            name: this.props.name,
-            value: this.props.value,
+        const { id, name, value, updateItem } = this.props;
+        const updatedItem = {
+            ...{ id, name, value },
+            [event.target.name]: event.target.value,
         };
 
-        this.props.updateItem({
-            ...currentItem,
-            [event.target.name]: event.target.value,
-        })
+        updateItem(updatedItem.id, updatedItem.name, updatedItem.value);
+    }
 
+    handleRemoveItem() {
+        const { id , removeItem } = this.props;
+        removeItem(id);
     }
 
     handleKeyPress(event) {
@@ -87,7 +92,7 @@ class Item extends Component {
         let editAction = (<FontAwesomeIcon className='actionIcons' title='edit'
             onClick={() => this.setState({ editing: true })} icon='edit' />); //pen icon
         let deleteAction = (<FontAwesomeIcon className='actionIcons' title='delete'
-            onClick={() => this.props.removeItem()} icon='times' />); //x icon //maybe use trash can
+            onClick={this.handleRemoveItem} icon='times' />); //x icon //maybe use trash can
         return <div className='itemActions'>{editAction} {deleteAction}</div>
     }
 
@@ -98,6 +103,14 @@ class Item extends Component {
         return this.state.editing ? this.renderInputs() : this.renderStatic();
     }
 }
+
+const mapStateToProps = (state, ownProps) => {
+    const item = getItemById(state, ownProps.id);
+    const { name, value } = item;
+    return { name, value };
+}
+
+const mapDispatchToProps = { updateItem }
 
 Item.propTypes = {
     id: PropTypes.oneOfType([
@@ -114,4 +127,4 @@ Item.propTypes = {
     removeItem: PropTypes.func.isRequired,
 }
 
-export default Item;
+export default connect(mapStateToProps, mapDispatchToProps)(Item);

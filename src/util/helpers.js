@@ -5,7 +5,7 @@ const sumItems = (items) => {
         if(isNaN(Number(currentItem.value)))
             return acc;
             
-        return Number(acc + currentItem.value);
+        return Number(acc + Number(currentItem.value));
     }, 0);
 }
 

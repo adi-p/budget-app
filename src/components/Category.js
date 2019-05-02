@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';
 import Item from './Item';
@@ -6,6 +7,10 @@ import OutsideClick from './utilityComponents/OutsideClick';
 
 import './Category.css';
 import "./utilityComponents/Lib";
+
+
+import { getCategoryById, getCategoryItems } from '../redux/selectors'
+import { updateCategoryName, addItem, removeItem } from '../redux/actions';
 import { sumItems } from '../util/helpers';
 
 
@@ -14,20 +19,19 @@ class Category extends Component {
         super(props);
         this.state = {
             editing: true,
-            newItemName: '',
         }
-
-        this.idCounter = 0;
 
         this.handleChange = this.handleChange.bind(this);
         this.handleKeyPress = this.handleKeyPress.bind(this);
         this.setEdit = this.setEdit.bind(this);
 
-        this.addItem = this.addItem.bind(this);
+        this.handleAddItem = this.handleAddItem.bind(this);
+        this.handleRemoveItem = this.handleRemoveItem.bind(this);
     }
 
     handleChange(event) {
-        this.props.updateCategoryName(event.target.value)
+        const { updateCategoryName, id } = this.props;
+        updateCategoryName(id, event.target.value);
     }
 
     handleKeyPress(event) {
@@ -43,15 +47,17 @@ class Category extends Component {
 
     //** ITEM FUNCTIONS **/
 
-    addItem() {
-        const item = { id: this.idCounter, name: `item${this.idCounter}`, value: 0 }; //Do we need a temporary name?
-        this.props.addItem(item);
-        this.idCounter++;
+    handleAddItem() {
+        const { addItem, id } = this.props;
+        addItem(id, '', 0);
+    }
+
+    handleRemoveItem(itemId) {
+        const { removeItem, id } = this.props;
+        removeItem(id, itemId);
     }
 
     render() {
-
-        const { updateItem, removeItem } = this.props;
 
         let nameElement;
         if (this.state.editing || !this.props.name) {
@@ -66,14 +72,10 @@ class Category extends Component {
 
         const items = this.props.items.map(item => {
             return (
-                <li
-                    key={item.id}>
+                <li key={item.id}>
                     <Item
                         id={item.id}
-                        name={item.name}
-                        value={item.value}
-                        updateItem={updateItem}
-                        removeItem={() => removeItem(item)}
+                        removeItem={() => this.handleRemoveItem(item.id)}
                     />
                 </li>
             );
@@ -85,13 +87,13 @@ class Category extends Component {
                 <OutsideClick className='categoryNameWrapper'
                     outsideClickCallback={() => this.setEdit(false)}
                     onClick={() => this.setEdit(true)}>
-                    {nameElement}   
+                    {nameElement}
                 </OutsideClick>
                 <FontAwesomeIcon className='deleteButton' title='delete'
-                    onClick={() => this.props.removeCategory()} icon='times' /> { /*//x icon //maybe use trash can */}
+                    onClick={this.props.removeCategory} icon='times' /> { /*//x icon //maybe use trash can */}
                 <ul>
                     {items}
-                    <button onClick={this.addItem}>Add Item</button>
+                    <button onClick={this.handleAddItem}>Add Item</button>
                 </ul>
                 Category Total : ${sumItems(this.props.items)}
             </div>
@@ -99,11 +101,19 @@ class Category extends Component {
     }
 }
 
+const mapStateToProps = (state, ownProps) => {
+    const items = getCategoryItems(state, ownProps.id);
+    const name = getCategoryById(state, ownProps.id).name; //check if we want this to also return items
+    return { name, items };
+}
+
+const mapDispatchToProps = { updateCategoryName, addItem, removeItem }
+
 Category.propTypes = {
-    // id: PropTypes.oneOfType([
-    //     PropTypes.string,
-    //     PropTypes.number,
-    // ]).isRequired,
+    id: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number,
+    ]).isRequired,
     name: PropTypes.string.isRequired,
     items: PropTypes.array, //maybe add format at some point
 
@@ -111,9 +121,7 @@ Category.propTypes = {
     updateCategoryName: PropTypes.func.isRequired,
     removeCategory: PropTypes.func.isRequired,
     addItem: PropTypes.func.isRequired,
-    updateItem: PropTypes.func.isRequired,
-    removeItem: PropTypes.func.isRequired,
 
 }
 
-export default Category;
+export default connect(mapStateToProps, mapDispatchToProps)(Category);

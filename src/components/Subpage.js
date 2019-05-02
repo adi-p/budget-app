@@ -1,80 +1,67 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux'
 import PropTypes from 'prop-types';
 import Category from './Category';
 import './Subpage.css';
 
+import { getSubPageItems, getSubPageCategories } from '../redux/selectors'
+import { addCategory, removeCategory } from '../redux/actions';
 import { sumItems } from '../util/helpers';
 
 
 class Subpage extends Component {
     constructor(props) {
         super(props);
-
-        this.idCounter = 0;
-
-        this.addCategory = this.addCategory.bind(this);
-        this.calculateTotal = this.calculateTotal.bind(this);
+        this.handleAddCategory = this.handleAddCategory.bind(this);
+        this.handleRemoveCategory = this.handleRemoveCategory.bind(this);
     }
 
-    addCategory() {
-        const newCategory = {
-            id: this.idCounter,
-            name: `category${this.idCounter}`, //do we need a temporary name?
-            items: [],
-        };
-        this.props.addCategory(newCategory);
-        this.idCounter++;
+    handleAddCategory() {
+        const { addCategory, type } = this.props;
+        addCategory(type, '');
     }
 
-    calculateTotal() {
-        return this.props.categories.reduce((acc, currentCategory) => {
-            return Number(acc + sumItems(currentCategory.items));
-        }, 0);
+    handleRemoveCategory(categoryId) {
+        const { removeCategory, type } = this.props;
+        removeCategory(type, categoryId);
     }
 
     render() {
-        const categories = this.props.categories.map(category => {
-            //TODO maybe add ordering at some point
-            return (
-                <Category
-                    key={category.id}
-                    name={category.name}
-                    items={category.items}
-                    total={category.total}
-                    updateCategoryName={(newName) => this.props.updateCategoryName(category.id, newName)}
-                    removeCategory={() => this.props.removeCategory(category.id)}
-                    addItem={(item) => this.props.addItem(category.id, item)}
-                    updateItem={(item) => this.props.updateItem(category.id, item)}
-                    removeItem={(item) => this.props.removeItem(category.id, item)}
-
-                />
-            );
-        });
-
+        const categories = this.props.categories.map(category =>
+            (<Category
+                key={category.id}
+                id={category.id}
+                removeCategory={() => this.handleRemoveCategory(category.id)}
+            />));
 
         return (
             <div className='subpage'>
                 <h1 className='subpageHeader'>{this.props.name}</h1>
                 <div>
                     {categories}
-                    <button onClick={this.addCategory}>Add Category</button>
+                    <button onClick={this.handleAddCategory}>Add Category</button>
                 </div>
                 <hr />
-                <span>Subtotal: ${this.calculateTotal()}</span>
+                <span>Subtotal: ${this.props.total}</span>
             </div>
         );
     }
 }
-Subpage.propTypes = {
-    name: PropTypes.string,
-    categories: PropTypes.array, //maybe add format at some point
-    //functions
-    addCategory: PropTypes.func.isRequired,
-    updateCategoryName: PropTypes.func.isRequired,
-    removeCategory: PropTypes.func.isRequired,
-    addItem: PropTypes.func.isRequired,
-    updateItem: PropTypes.func.isRequired,
-    removeItem: PropTypes.func.isRequired,
+
+const mapStateToProps = (state, ownProps) => {
+    const categories = getSubPageCategories(state, ownProps.type);
+    const items = getSubPageItems(state, ownProps.type);
+
+    return { categories, total: sumItems(items) };
 }
 
-export default Subpage;
+const mapDispatchToProps = { addCategory, removeCategory }
+
+Subpage.propTypes = {
+    name: PropTypes.string,
+    type: PropTypes.string, //should this just be called type? maybe subpageType is better
+    categories: PropTypes.array, //maybe add format at some point
+    addCategory: PropTypes.func,
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Subpage);
