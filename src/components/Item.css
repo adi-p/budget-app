@@ -1,15 +1,17 @@
-.itemName , .itemValue, .editableWrapper {
-    display: inline-flex;
+.itemName,
+.itemValue,
+.editableWrapper {
+  display: inline-flex;
 }
 
 .actionIcons {
-    margin-left: 5px;
+  margin-left: 5px;
 }
 
 .itemActions {
-    display: none;
+  display: none;
 }
 
 .editableWrapper:hover .itemActions {
-    display: inline-flex;
+  display: inline-flex;
 }

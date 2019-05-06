@@ -3,6 +3,7 @@
 FOR SURE
 - Use string ressources - Internationalization? Currency?
 - styling
+    - this generally needs improvement
     - add trash button to items
     - make action buttons icons -> on hover? or ... ? 
         - I think ... is better

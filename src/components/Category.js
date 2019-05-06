@@ -20,6 +20,9 @@ class Category extends Component {
         this.state = {
             editing: true,
         }
+        this.inputRef = null;
+
+        this.focusInput = this.focusInput.bind(this);
 
         this.handleChange = this.handleChange.bind(this);
         this.handleKeyPress = this.handleKeyPress.bind(this);
@@ -27,6 +30,20 @@ class Category extends Component {
 
         this.handleAddItem = this.handleAddItem.bind(this);
         this.handleRemoveItem = this.handleRemoveItem.bind(this);
+    }
+
+    componentDidMount() {
+        this.focusInput();
+    }
+
+    componentDidUpdate() {
+        this.focusInput();
+    }
+
+    focusInput() {
+        if (this.inputRef) {
+            this.inputRef.focus();
+        }
     }
 
     handleChange(event) {
@@ -60,13 +77,18 @@ class Category extends Component {
     render() {
 
         let nameElement;
-        if (this.state.editing || !this.props.name) {
-            nameElement = (<input type="text" value={this.props.name} placeholder='Category Name'
+        let namePlaceholder = 'Category Name';
+        if (this.state.editing) {
+            nameElement = (<input type="text"
+                ref={ref => this.inputRef = ref}
+                className={'categoryNameInput'}
+                value={this.props.name}
+                placeholder={namePlaceholder}
                 onChange={this.handleChange}
                 onKeyPress={this.handleKeyPress}
             />);
         } else {
-            const displayName = this.props.name || 'Category Name';
+            const displayName = this.props.name || namePlaceholder;
             nameElement = <h3 className='categoryName editableDiv' onClick={() => this.setEdit(true)}>{displayName}</h3>;
         }
 

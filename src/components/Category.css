@@ -1,8 +1,13 @@
-.categoryName { 
-    color: #A9A9A9;
-    font-size: 20px;
-  } 
-  
-  .categoryNameWrapper ,  .deleteButton {
-      display: inline-flex;
-  }
+.categoryName {
+  color: #a9a9a9;
+  font-size: 20px;
+}
+.categoryNameInput {
+  margin-top: 20px; /*should match .categoryName font-size*/
+  margin-bottom: 20px; /*should match .categoryName font-size*/
+}
+
+.categoryNameWrapper,
+.deleteButton {
+  display: inline-flex;
+}
