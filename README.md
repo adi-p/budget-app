@@ -14,5 +14,5 @@ You will also see any lint errors in the console.
 
 ### Project Info
 
-This app was mostly started to get a feel for React and gain skills. I start it knowing no React so hopefully it gets better over time.
-Features will be added mostly based on what I want to learn to do.
+This app was started to get a feel for React and gain skills. I started it knowing no React so hopefully it will get better over time.
+I will be adding features mostly based on what I want to learn to do.
