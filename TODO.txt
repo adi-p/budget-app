@@ -1,3 +1,5 @@
+* important
+
 FOR SURE
 - Use string ressources - Internationalization? Currency?
 - styling
@@ -9,12 +11,16 @@ FOR SURE
 
 - change README.md to have relevant info
 - make textbox its own component?
-- add proptypes - half done
 - better linting
-- 
-
+- redux 
+    - Add tests for reducers
+    - figure out component vs. container splitting *
+        - really need to figure out where logic should be done without
+          passing too many props
+        - should add/remove/update all be done at the same place?
 
 MAYBE
+- use react hooks
 - add back end
     - Typescript?
     - if this ever gets done, logic with ID will need to be looked at again
@@ -24,6 +30,8 @@ MAYBE
 - add dates to items? -> is that useful?
 
 - add tests -> front end and back end
-- use redux
-
 - get own jira board to replace this file
+- add tags to items
+    - filter by tags
+- drag and drop items and categories
+    - ordering?
