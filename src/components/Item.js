@@ -51,6 +51,9 @@ class Item extends Component {
     focusInput() {
         if (this.state.elementToFocusName && this[this.state.elementToFocusName]) {
             this[this.state.elementToFocusName].focus();
+            this.setState({
+                elementToFocusName: '',
+            });
         }
     }
 
@@ -114,14 +117,14 @@ class Item extends Component {
         name = name || `Item ${id}`; //is Id the best idea?
         value = value || 0;
 
-        let nameElement = <div className='itemName' onClick={() => this.setToEditMode(FIELDS.name)}>{name}</div>;
+        let nameElement = <div className='itemName' onClick={() => this.setToEditMode(FIELDS.name)}>{name} :</div>;
         let valueElement = <div className='itemValue' onClick={() => this.setToEditMode(FIELDS.value)}>${value}</div>;
 
         return (
             <div className='editableWrapper'>
                 <div className='editableDiv itemInfo'>
                     {/* set to edit mode will be weird here */}
-                    {nameElement} : {valueElement}
+                    {nameElement}{valueElement}
                 </div>
                 {this.renderActions()}
             </div>);
