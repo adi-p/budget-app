@@ -27,6 +27,9 @@ class Item extends Component {
 
         this.focusInput = this.focusInput.bind(this);
 
+        this.placeHolderName = `Item ${props.id}`;
+        this.placeholderValue = '0';
+
         this.handleChange = this.handleChange.bind(this);
         this.handleRemoveItem = this.handleRemoveItem.bind(this);
         this.handleKeyPress = this.handleKeyPress.bind(this);
@@ -93,12 +96,14 @@ class Item extends Component {
     }
 
     renderInputs() {
-        let nameElement = (<input type="text" name={FIELDS.name} value={this.props.name}
+        let nameElement = (<input type="text" className='textInput' name={FIELDS.name} value={this.props.name}
+            placeholder={this.placeHolderName}
             ref={(ref) => { this.nameInput = ref }}
             onChange={this.handleChange}
             onKeyPress={this.handleKeyPress}
         />);
-        let valueElement = (<input type="text" name={FIELDS.value} value={this.props.value}
+        let valueElement = (<input type="text" className='textInput' name={FIELDS.value} value={this.props.value}
+            placeholder={this.placeholderValue}
             ref={(ref) => { this.valueInput = ref }}
             onChange={this.handleChange}
             onKeyPress={this.handleKeyPress}
@@ -106,28 +111,32 @@ class Item extends Component {
         />);
 
         return (
-            <OutsideClick outsideClickCallback={() => this.setState({ editing: false })}>
-                {/* //maybe validate fields on exit (especially value) */}
-                {nameElement} : {valueElement}
-            </OutsideClick>);
+            <OutsideClick htmlElementType={'tr'} outsideClickCallback={() => this.setState({ editing: false })}>
+                <td>
+                    {nameElement}
+                </td>
+                <td>
+                    {valueElement}
+                </td>
+            </OutsideClick>
+        );
     }
 
     renderStatic() {
-        let { id, name, value } = this.props;
-        name = name || `Item ${id}`; //is Id the best idea?
-        value = value || 0;
+        let { name, value } = this.props;
+        name = name || this.placeHolderName;
+        value = value || this.placeholderValue;
 
-        let nameElement = <div className='itemName' onClick={() => this.setToEditMode(FIELDS.name)}>{name} :</div>;
+        let nameElement = <div className='itemName' onClick={() => this.setToEditMode(FIELDS.name)}>{name}</div>;
         let valueElement = <div className='itemValue' onClick={() => this.setToEditMode(FIELDS.value)}>${value}</div>;
 
         return (
-            <div className='editableWrapper'>
-                <div className='editableDiv itemInfo'>
-                    {/* set to edit mode will be weird here */}
-                    {nameElement}{valueElement}
-                </div>
-                {this.renderActions()}
-            </div>);
+            <tr className='editableRow'>
+                <td>{nameElement}</td>
+                <td>{valueElement}</td>
+                <td>{this.renderActions()}</td>
+            </tr>
+        );
     }
 
     renderActions() {
@@ -135,7 +144,7 @@ class Item extends Component {
             onClick={() => this.setToEditMode(FIELDS.name)} icon='edit' />); //pen icon
         let deleteAction = (<FontAwesomeIcon className='actionIcons' title='delete'
             onClick={this.handleRemoveItem} icon='times' />); //x icon //maybe use trash can
-        return <div className='itemActions'>{editAction} {deleteAction}</div>
+        return <>{editAction} {deleteAction}</>
     }
 
 

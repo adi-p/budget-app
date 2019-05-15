@@ -80,8 +80,8 @@ class Category extends Component {
         let namePlaceholder = 'Category Name';
         if (this.state.editing) {
             nameElement = (<input type="text"
+                className={'textInput categoryNameInput'}
                 ref={ref => this.inputRef = ref}
-                className={'categoryNameInput'}
                 value={this.props.name}
                 placeholder={namePlaceholder}
                 onChange={this.handleChange}
@@ -94,17 +94,16 @@ class Category extends Component {
 
         const items = this.props.items.map(item => {
             return (
-                <li key={item.id}>
-                    <Item
-                        id={item.id}
-                        removeItem={() => this.handleRemoveItem(item.id)}
-                    />
-                </li>
+                <Item
+                    key={item.id}
+                    id={item.id}
+                    removeItem={() => this.handleRemoveItem(item.id)}
+                />
             );
         });
 
         return (
-            <div>
+            <div className='categoryDiv'>
                 {/* Need to inline name and trash button */}
                 <OutsideClick className='categoryNameWrapper'
                     outsideClickCallback={() => this.setEdit(false)}
@@ -113,10 +112,14 @@ class Category extends Component {
                 </OutsideClick>
                 <FontAwesomeIcon className='deleteButton' title='delete'
                     onClick={this.props.removeCategory} icon='times' /> { /*//x icon //maybe use trash can */}
-                <ul>
-                    {items}
-                    <button onClick={this.handleAddItem}>Add Item</button>
-                </ul>
+                <table>
+                    <tbody>
+                        {items}
+                        <tr>
+                            <td><button onClick={this.handleAddItem}>Add Item</button></td>
+                        </tr>
+                    </tbody>
+                </table>
                 Category Total : ${sumItems(this.props.items)}
             </div>
         );

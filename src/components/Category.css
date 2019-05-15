@@ -1,13 +1,29 @@
+.categoryDiv {
+  padding: 10px;
+  margin:10px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px 0 #c7af9f;
+}
+
 .categoryName {
   color: #a9a9a9;
+}
+
+.categoryNameInput, .categoryName {
   font-size: 20px;
 }
 .categoryNameInput {
-  margin-top: 20px; /*should match .categoryName font-size*/
-  margin-bottom: 20px; /*should match .categoryName font-size*/
+  line-height: 1.125rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
 }
 
 .categoryNameWrapper,
 .deleteButton {
   display: inline-flex;
+}
+
+.categoryNameWrapper {
+  margin-right: 5px;
 }

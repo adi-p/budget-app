@@ -30,8 +30,11 @@ class OutsideClick extends Component {
     }
 
     render() {
-        const { children, outsideClickCallback, ...rest } = this.props;
-        return <div ref={(ref) => this.wrapperRef = ref} {...rest}>{children}</div>;
+        const { children, outsideClickCallback, htmlElementType, ...rest } = this.props;
+        const HtmlElementType = htmlElementType || 'div';
+
+        return <HtmlElementType ref={(ref) => this.wrapperRef = ref} {...rest}>{children}</HtmlElementType>;
+
     }
 }
 

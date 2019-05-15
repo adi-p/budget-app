@@ -7,11 +7,3 @@
 .actionIcons {
   margin-left: 5px;
 }
-
-.itemActions {
-  display: none;
-}
-
-.editableWrapper:hover .itemActions {
-  display: inline-flex;
-}
