@@ -109,6 +109,7 @@ const pageReducers = (state = [], action) => {
                 ...state,
                 [action.subpageId]: subpage(state[action.subpageId], action),
                 categoriesById: categoriesById(state.categoriesById, action),
+                // itemsById: itemsById(state.itemsById, action), need to remove items if category doesn't exist...
             };
         case ADD_ITEM:
         case REMOVE_ITEM:

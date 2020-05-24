@@ -59,7 +59,7 @@ const mapDispatchToProps = { addCategory, removeCategory }
 
 Subpage.propTypes = {
     name: PropTypes.string,
-    type: PropTypes.string, //should this just be called type? maybe subpageType is better
+    type: PropTypes.string, //should this just be called type? maybe subpageType is better? subpage id?
     categories: PropTypes.array, //maybe add format at some point
     addCategory: PropTypes.func,
 }

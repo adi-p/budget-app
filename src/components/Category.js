@@ -10,7 +10,7 @@ import "./utilityComponents/Lib";
 
 
 import { getCategoryById, getCategoryItems } from '../redux/selectors'
-import { updateCategoryName, addItem, removeItem } from '../redux/actions';
+import { updateCategory, addItem, removeItem } from '../redux/actions';
 import { sumItems } from '../util/helpers';
 
 
@@ -20,7 +20,7 @@ class Category extends Component {
         this.state = {
             editing: true,
         }
-        this.inputRef = null;
+        this.nameInputRef = null;
 
         this.focusInput = this.focusInput.bind(this);
 
@@ -41,14 +41,14 @@ class Category extends Component {
     }
 
     focusInput() {
-        if (this.inputRef) {
-            this.inputRef.focus();
+        if (this.nameInputRef) {
+            this.nameInputRef.focus();
         }
     }
 
     handleChange(event) {
-        const { updateCategoryName, id } = this.props;
-        updateCategoryName(id, event.target.value);
+        const { updateCategory, id } = this.props;
+        updateCategory(id, event.target.value);
     }
 
     handleKeyPress(event) {
@@ -65,13 +65,13 @@ class Category extends Component {
     //** ITEM FUNCTIONS **/
 
     handleAddItem() {
-        const { addItem, id } = this.props;
-        addItem(id, '', 0);
+        const { addItem, id: categoryId } = this.props;
+        addItem(categoryId, '', 0);
     }
 
     handleRemoveItem(itemId) {
-        const { removeItem, id } = this.props;
-        removeItem(id, itemId);
+        const { removeItem, id: categoryId } = this.props;
+        removeItem(categoryId, itemId);
     }
 
     render() {
@@ -81,7 +81,7 @@ class Category extends Component {
         if (this.state.editing) {
             nameElement = (<input type="text"
                 className={'textInput categoryNameInput'}
-                ref={ref => this.inputRef = ref}
+                ref={ref => this.nameInputRef = ref}
                 value={this.props.name}
                 placeholder={namePlaceholder}
                 onChange={this.handleChange}
@@ -132,7 +132,7 @@ const mapStateToProps = (state, ownProps) => {
     return { name, items };
 }
 
-const mapDispatchToProps = { updateCategoryName, addItem, removeItem }
+const mapDispatchToProps = { updateCategory, addItem, removeItem }
 
 Category.propTypes = {
     id: PropTypes.oneOfType([
@@ -143,7 +143,7 @@ Category.propTypes = {
     items: PropTypes.array, //maybe add format at some point
 
     //functions
-    updateCategoryName: PropTypes.func.isRequired,
+    updateCategory: PropTypes.func.isRequired,
     removeCategory: PropTypes.func.isRequired,
     addItem: PropTypes.func.isRequired,
 

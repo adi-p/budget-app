@@ -23,7 +23,7 @@ export const UPDATE_ITEM = 'UPDATE_ITEM';
 let nextCategoryId = 0
 export const addCategory = (subpageId, name) => ({
     type: ADD_CATEGORY,
-    id: nextCategoryId++,
+    id: nextCategoryId++, // TODO: Should probably be a uuid or something
     subpageId,
     name,
 });
@@ -35,7 +35,7 @@ export const removeCategory = (subpageId, id) => ({
 });
 
 //TODO: need to figure out if we want to pass more daat to this (apart from just name)
-export const updateCategoryName = (id, name) => ({
+export const updateCategory = (id, name) => ({
     type: UPDATE_CATEGORY_NAME,
     id,
     name,
@@ -47,7 +47,7 @@ export const updateCategoryName = (id, name) => ({
 let nextItemId = 0
 export const addItem = (categoryId, name, value) => ({
     type: ADD_ITEM,
-    id: nextItemId++,
+    id: nextItemId++, // TODO: Should probably be a uuid or something
     categoryId,
     name,
     value,
