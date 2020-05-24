@@ -22,17 +22,35 @@ FOR SURE
 
 MAYBE
 - use react hooks
+- Typescript for everything? -> would help with intellisence a lot
 - add back end
     - Typescript?
     - if this ever gets done, logic with ID will need to be looked at again
     - add saving capability
+
+    - look into redux saga for side effects for redux (Or some kind of equivalent)
+
 - add a side bar (choose page to edit) -> only make sense with a backend
 - field validation? like for value is a number and name isn't empty
 - add dates to items? -> is that useful?
 
 - add tests -> front end and back end
 - get own jira board to replace this file
+    - trello?
 - add tags to items
     - filter by tags
 - drag and drop items and categories
     - ordering?
+
+- have an empty item box at the bottom of each category instead of an add item button
+- have tool buttons show up on hover
+
+- Design
+    - Have a "Budget Plan" page -> rough outline of budget goals
+        - Have categories and sub categories 
+            - Goals per category
+            - Maybe allow user to associate colour to make finding it better
+        - User can assign items in their budget to categories in the Plan
+            - sub categories?
+            - search per category
+                - Does this become DB like?
