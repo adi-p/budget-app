@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';
-import OutsideClick from './utilityComponents/OutsideClick';
 import "./utilityComponents/Lib";
 import './Item.css';
 
@@ -18,7 +17,6 @@ class Item extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            editing: true,
             elementToFocusName: `${FIELDS.name}Input`,
         }
 
@@ -32,12 +30,10 @@ class Item extends Component {
 
         this.handleChange = this.handleChange.bind(this);
         this.handleRemoveItem = this.handleRemoveItem.bind(this);
-        this.handleKeyPress = this.handleKeyPress.bind(this);
         this.onValueFocus = this.onValueFocus.bind(this);
         this.setToEditMode = this.setToEditMode.bind(this);
 
         this.renderInputs = this.renderInputs.bind(this);
-        this.renderStatic = this.renderStatic.bind(this);
         this.renderActions = this.renderActions.bind(this);
     }
 
@@ -52,14 +48,18 @@ class Item extends Component {
 
     //set focus to input that was clicked when starting edit
     focusInput() {
-        if (this.state.elementToFocusName && this[this.state.elementToFocusName]) {
-            this[this.state.elementToFocusName].focus();
-            this.setState({
-                elementToFocusName: '',
-            });
+        if (this.state.elementToFocusName) {
+            let el = this[this.state.elementToFocusName];
+            if(el) {
+                el.focus();
+                this.setState({
+                    elementToFocusName: '',
+                });
+            }
         }
     }
 
+    // TODO: consider more descriptive name
     handleChange(event) {
         const { id, name, value, updateItem } = this.props;
         const updatedItem = {
@@ -75,12 +75,6 @@ class Item extends Component {
         removeItem(id);
     }
 
-    handleKeyPress(event) {
-        if (event.key === 'Enter') {
-            this.setState({ editing: false })
-        }
-    }
-
     onValueFocus(event) {
         // select text in textbox so 0 can get overwitten
         if (this.props.value === 0) {
@@ -90,68 +84,62 @@ class Item extends Component {
 
     setToEditMode(elementToFocusName) {
         this.setState({
-            editing: true,
             elementToFocusName: `${elementToFocusName}Input`,
         })
     }
 
     renderInputs() {
-        let nameElement = (<input type="text" className='textInput' name={FIELDS.name} value={this.props.name}
-            placeholder={this.placeHolderName}
-            ref={(ref) => { this.nameInput = ref }}
-            onChange={this.handleChange}
-            onKeyPress={this.handleKeyPress}
-        />);
-        let valueElement = (<input type="text" className='textInput' name={FIELDS.value} value={this.props.value}
-            placeholder={this.placeholderValue}
-            ref={(ref) => { this.valueInput = ref }}
-            onChange={this.handleChange}
-            onKeyPress={this.handleKeyPress}
-            onFocus={this.onValueFocus}
-        />);
+        let nameElement = (
+            <input type="text" name={FIELDS.name} value={this.props.name}
+                placeholder={this.placeHolderName}
+                ref={(ref) => { this.nameInput = ref }}
+                className='textInput'
+
+                onChange={this.handleChange}
+                onClick={() => this.setToEditMode(FIELDS.name)}
+            />
+        );
+        let valueElement = (
+            <input type="text" name={FIELDS.value} value={this.props.value}
+                placeholder={this.placeholderValue}
+                ref={(ref) => { this.valueInput = ref }}
+                className='textInput'
+
+                onChange={this.handleChange}
+                onClick={() => this.setToEditMode(FIELDS.value)}
+
+                onFocus={this.onValueFocus}
+            />
+        );
 
         return (
-            <OutsideClick htmlElementType={'tr'} outsideClickCallback={() => this.setState({ editing: false })}>
+            <tr>
                 <td>
                     {nameElement}
                 </td>
                 <td>
                     {valueElement}
                 </td>
-            </OutsideClick>
-        );
-    }
-
-    renderStatic() {
-        let { name, value } = this.props;
-        name = name || this.placeHolderName;
-        value = value || this.placeholderValue;
-
-        let nameElement = <div className='itemName' onClick={() => this.setToEditMode(FIELDS.name)}>{name}</div>;
-        let valueElement = <div className='itemValue' onClick={() => this.setToEditMode(FIELDS.value)}>${value}</div>;
-
-        return (
-            <tr className='editableRow'>
-                <td>{nameElement}</td>
-                <td>{valueElement}</td>
                 <td>{this.renderActions()}</td>
             </tr>
         );
     }
 
+
     renderActions() {
-        let editAction = (<FontAwesomeIcon className='actionIcons' title='edit'
-            onClick={() => this.setToEditMode(FIELDS.name)} icon='edit' />); //pen icon
-        let deleteAction = (<FontAwesomeIcon className='actionIcons' title='delete'
-            onClick={this.handleRemoveItem} icon='times' />); //x icon //maybe use trash can
-        return <>{editAction} {deleteAction}</>
+        let deleteAction = (
+            <button onClick={this.handleRemoveItem}>
+                <FontAwesomeIcon className='actionIcons' title='delete' icon='trash-alt' />
+            </button>
+            ); //trash can icon
+        return <>{deleteAction}</>
     }
 
 
 
 
     render() {
-        return this.state.editing ? this.renderInputs() : this.renderStatic();
+        return this.renderInputs();
     }
 }
 

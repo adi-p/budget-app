@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';
 import Item from './Item';
-import OutsideClick from './utilityComponents/OutsideClick';
 
 import './Category.css';
 import "./utilityComponents/Lib";
@@ -16,17 +15,12 @@ import { sumItems } from '../util/helpers';
 
 class Category extends Component {
     constructor(props) {
-        super(props);
-        this.state = {
-            editing: true,
-        }
+        super(props);        
         this.nameInputRef = null;
 
         this.focusInput = this.focusInput.bind(this);
 
         this.handleChange = this.handleChange.bind(this);
-        this.handleKeyPress = this.handleKeyPress.bind(this);
-        this.setEdit = this.setEdit.bind(this);
 
         this.handleAddItem = this.handleAddItem.bind(this);
         this.handleRemoveItem = this.handleRemoveItem.bind(this);
@@ -51,16 +45,6 @@ class Category extends Component {
         updateCategory(id, event.target.value);
     }
 
-    handleKeyPress(event) {
-        if (event.key === 'Enter') {
-            this.setEdit(false);
-        }
-    }
-
-    setEdit(value) {
-        this.setState({ editing: value });
-    }
-
 
     //** ITEM FUNCTIONS **/
 
@@ -75,22 +59,16 @@ class Category extends Component {
     }
 
     render() {
-
-        let nameElement;
         let namePlaceholder = 'Category Name';
-        if (this.state.editing) {
-            nameElement = (<input type="text"
-                className={'textInput categoryNameInput'}
-                ref={ref => this.nameInputRef = ref}
-                value={this.props.name}
-                placeholder={namePlaceholder}
-                onChange={this.handleChange}
-                onKeyPress={this.handleKeyPress}
-            />);
-        } else {
-            const displayName = this.props.name || namePlaceholder;
-            nameElement = <h3 className='categoryName editableDiv' onClick={() => this.setEdit(true)}>{displayName}</h3>;
-        }
+        
+        let nameElement = (<input type="text"
+            className={'textInput categoryNameInput'}
+            ref={ref => this.nameInputRef = ref}
+            value={this.props.name}
+            placeholder={namePlaceholder}
+            onChange={this.handleChange}
+            onKeyPress={this.handleKeyPress}
+        />);
 
         const items = this.props.items.map(item => {
             return (
@@ -105,13 +83,12 @@ class Category extends Component {
         return (
             <div className='categoryDiv'>
                 {/* Need to inline name and trash button */}
-                <OutsideClick className='categoryNameWrapper'
-                    outsideClickCallback={() => this.setEdit(false)}
-                    onClick={() => this.setEdit(true)}>
+                <div className='categoryNameWrapper'> 
                     {nameElement}
-                </OutsideClick>
-                <FontAwesomeIcon className='deleteButton' title='delete'
-                    onClick={this.props.removeCategory} icon='times' /> { /*//x icon //maybe use trash can */}
+                </div>
+                <button onClick={this.props.removeCategory} >
+                    <FontAwesomeIcon className='deleteButton' title='delete' icon='trash-alt' /> { /* trash can icon */}
+                </button>
                 <table>
                     <tbody>
                         {items}
