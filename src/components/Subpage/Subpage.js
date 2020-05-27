@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types';
-import Category from './Category';
+import Category from '../Category/Category';
 import './Subpage.css';
 
-import { getSubPageItems, getSubPageCategories } from '../redux/selectors'
-import { addCategory, removeCategory } from '../redux/actions';
-import { sumItems } from '../util/helpers';
+import { getSubPageItems, getSubPageCategories } from '../../redux/selectors'
+import { addCategory, removeCategory } from '../../redux/actions';
+import { sumItems } from '../../util/helpers';
 
 
 class Subpage extends Component {

@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types';
-import Subpage from './Subpage';
+import Subpage from '../Subpage/Subpage';
 import './Page.css';
 
-import { getSubPageItems } from '../redux/selectors'
-import { sumItems } from '../util/helpers';
+import { getSubPageItems } from '../../redux/selectors'
+import { sumItems } from '../../util/helpers';
 
 const SUBPAGETYPE = {
     IN: 'in',
@@ -26,7 +26,7 @@ class Page extends Component {
                         type={subpageType}
                         name={subpageType === SUBPAGETYPE.IN ? 'Money in' : 'Money out'} //temporary
                     />))}
-                TOTAL : ${this.props.total}
+                TOTAL : ${this.props.total} {/* Consider making 'total' a floating bar that never gets hidden */}
             </div>
         );
     }

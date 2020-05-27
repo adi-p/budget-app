@@ -2,15 +2,15 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';
-import Item from './Item';
+import Item from '../Item/Item';
 
 import './Category.css';
-import "./utilityComponents/Lib";
+import "../utilityComponents/Lib";
 
 
-import { getCategoryById, getCategoryItems } from '../redux/selectors'
-import { updateCategory, addItem, removeItem } from '../redux/actions';
-import { sumItems } from '../util/helpers';
+import { getCategoryById, getCategoryItems } from '../../redux/selectors'
+import { updateCategory, addItem, removeItem } from '../../redux/actions';
+import { sumItems } from '../../util/helpers';
 
 
 class Category extends Component {

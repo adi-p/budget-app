@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';
-import "./utilityComponents/Lib";
+import "../utilityComponents/Lib";
 import './Item.css';
 
-import { getItemById } from '../redux/selectors'
-import { updateItem } from '../redux/actions';
+import { getItemById } from '../../redux/selectors'
+import { updateItem } from '../../redux/actions';
 
 const FIELDS = {
     name: "name",
