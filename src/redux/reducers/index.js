@@ -5,6 +5,9 @@ import {
     ADD_ITEM,
     REMOVE_ITEM,
     UPDATE_ITEM,
+    ADD_TAG,
+    REMOVE_TAG,
+    UPDATE_TAG,
 } from '../actions'
 
 const subpage = (state = [], action) => {
@@ -33,7 +36,6 @@ const categoriesById = (state = {}, action) => {
                 },
             };
         case REMOVE_CATEGORY:
-            //TODO: need to check this work
             const { [action.id]: removedCategory, ...rest } = state;
             return rest;
         case UPDATE_CATEGORY_NAME:
@@ -81,6 +83,7 @@ const itemsById = (state = {}, action) => {
                     id: action.id,
                     name: action.name,
                     value: action.value,
+                    tags: action.tags,
                 },
             };
         case REMOVE_ITEM:
@@ -93,8 +96,54 @@ const itemsById = (state = {}, action) => {
                     ...state[action.id],
                     name: action.name,
                     value: action.value,
+                    tags: action.tags, //TODO: check
                 },
             };
+
+        case REMOVE_TAG:
+            //TODO
+            return state;
+        default:
+            return state
+    }
+}
+
+const tagsById = (state = {}, action) => {
+    switch (action.type) {
+        case ADD_TAG:
+            return {
+                ...state,
+                [action.id]: {
+                    id: action.id,
+                    name: action.name,
+                    items: [],
+                    colour: action.colour,
+                },
+            };
+        case REMOVE_TAG:
+            const { [action.id]: removedItem, ...rest } = state;
+            return rest;
+        case UPDATE_TAG:
+            return {
+                ...state,
+                [action.id]: {
+                    ...state[action.id],
+                    name: action.name,
+                    colour: action.colour,
+                },
+            };
+        case ADD_ITEM:
+        case REMOVE_ITEM:
+            //TODO: How will we find correct tags? look throught all?
+
+            // return {
+            //     ...state,
+            //     [action.categoryId]: {
+            //         ...state[action.categoryId],
+            //         items: items(state[action.categoryId].items, action),
+            //     },
+            // };
+            return state;
         default:
             return state
     }
@@ -118,6 +167,15 @@ const pageReducers = (state = [], action) => {
                 ...state,
                 categoriesById: categoriesById(state.categoriesById, action),
                 itemsById: itemsById(state.itemsById, action),
+            };
+
+        case ADD_TAG:
+        case REMOVE_TAG:
+        case UPDATE_TAG:
+            return {
+                ...state,
+                itemsById: itemsById(state.itemsById, action),
+                tagsById: tagsById(state.tagsById, action),
             };
         default:
             return state

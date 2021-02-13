@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';
+import Tag from '../Tag/Tag';
 import "../utilityComponents/Lib";
 import './Item.css';
 
@@ -11,7 +12,9 @@ import { updateItem } from '../../redux/actions';
 const FIELDS = {
     name: "name",
     value: "value",
+    tags: "tags",
 }
+//TODO: update/change the focus behaviour for the value field -  the references and referencing by name seem weird to do.
 
 class Item extends Component {
     constructor(props) {
@@ -22,16 +25,19 @@ class Item extends Component {
 
         this.nameInput = null;
         this.valueInput = null;
+        this.tagsElement = null;
 
         this.focusInput = this.focusInput.bind(this);
 
         this.placeHolderName = `Item ${props.id}`;
         this.placeholderValue = '0';
 
-        this.handleChange = this.handleChange.bind(this);
+        this.handleItemChange = this.handleItemChange.bind(this);
         this.handleRemoveItem = this.handleRemoveItem.bind(this);
         this.onValueFocus = this.onValueFocus.bind(this);
         this.setToEditMode = this.setToEditMode.bind(this);
+
+        this.handleAddTag = this.handleAddTag.bind(this);
 
         this.renderInputs = this.renderInputs.bind(this);
         this.renderActions = this.renderActions.bind(this);
@@ -59,20 +65,23 @@ class Item extends Component {
         }
     }
 
-    // TODO: consider more descriptive name
-    handleChange(event) {
-        const { id, name, value, updateItem } = this.props;
+    handleItemChange(event) {
+        const { id, name, value, tags, updateItem } = this.props;
         const updatedItem = {
-            ...{ id, name, value },
+            ...{ id, name, value, tags, },
             [event.target.name]: event.target.value,
         };
-
-        updateItem(updatedItem.id, updatedItem.name, updatedItem.value);
+        // NOTE:: I don't like this pattern. It's easy to forget to update both updatedItem and the line bellow.
+        updateItem(updatedItem.id, updatedItem.name, updatedItem.value, updatedItem.tags);
     }
 
     handleRemoveItem() {
         const { id, removeItem } = this.props;
         removeItem(id);
+    }
+
+    handleAddTag() {
+        // this.tagsElement.insert
     }
 
     onValueFocus(event) {
@@ -95,7 +104,7 @@ class Item extends Component {
                 ref={(ref) => { this.nameInput = ref }}
                 className='textInput'
 
-                onChange={this.handleChange}
+                onChange={this.handleItemChange}
                 onClick={() => this.setToEditMode(FIELDS.name)}
             />
         );
@@ -105,13 +114,22 @@ class Item extends Component {
                 ref={(ref) => { this.valueInput = ref }}
                 className='textInput'
 
-                onChange={this.handleChange}
+                onChange={this.handleItemChange}
                 onClick={() => this.setToEditMode(FIELDS.value)}
 
                 onFocus={this.onValueFocus}
             />
         );
 
+        let tagsElement;
+        
+        if(this.props.tags && this.props.tags.length) {
+            tagsElement = (this.props.tags.map(t => <Tag key={t.id} id={t.id} />));
+        } else {
+            tagsElement = <p> No tags </p>
+        }
+        
+       
         return (
             <tr>
                 <td>
@@ -119,6 +137,12 @@ class Item extends Component {
                 </td>
                 <td>
                     {valueElement}
+                </td>
+                <td ref={(ref) => { this.tagsElement = ref }}>
+                    {tagsElement}
+                </td>
+                <td>
+                    <button onClick={() => this.handleAddTag()} >Add Tag </button>
                 </td>
                 <td>{this.renderActions()}</td>
             </tr>
@@ -145,8 +169,7 @@ class Item extends Component {
 
 const mapStateToProps = (state, ownProps) => {
     const item = getItemById(state, ownProps.id);
-    const { name, value } = item;
-    return { name, value };
+    return item;
 }
 
 const mapDispatchToProps = { updateItem }
@@ -161,6 +184,7 @@ Item.propTypes = {
         PropTypes.string,
         PropTypes.number,
     ]).isRequired,
+    tags: PropTypes.array,
 
     updateItem: PropTypes.func.isRequired,
     removeItem: PropTypes.func.isRequired,

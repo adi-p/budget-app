@@ -4,7 +4,8 @@
      in: [], //array<categoryId>
      out: [], //array<categoryId>
      categoriesById: { }, //id -> category //where category is { id, name, items: []//array<itemId> }
-     itemsById: { }, //id -> item //where item is { id, name, value }
+     itemsById: { }, //id -> item //where item is { id, name, value, tags: []//array<tagId> }
+     tagsById: {}. //id -> tag //where tag is {id, name, items: []//array<itemId>, colour }
  } 
 */
 
@@ -20,7 +21,10 @@ export const getCategoryItems = (store, categoryId) =>
 export const getSubPageItems = (store, subpageType) =>
     store[subpageType] ? store[subpageType].reduce((itemAcc, currentCategoryId) => {
         return itemAcc.concat(getCategoryItems(store, currentCategoryId))
-    }, []) : []; // IT is not obvious that store.in and store.out are arrays of categories, should make it more explicit
+    }, []) : []; // IT is not obvious that store.in and store.out are arrays of categories, should make it more explicit, store.inCategories?
 
 export const getSubPageCategories = (store, subpageType) =>
     store[subpageType] ? store[subpageType].map(categoryId => store.categoriesById[categoryId]) : [];
+
+export const getTagById = (store, tagId) =>
+    store.tagsById[tagId] ? store.tagsById[tagId] : {}

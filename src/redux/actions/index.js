@@ -18,6 +18,10 @@ export const REMOVE_ITEM = 'REMOVE_ITEM';
 export const UPDATE_ITEM = 'UPDATE_ITEM';
 
 
+export const ADD_TAG = 'ADD_TAG';
+export const REMOVE_TAG = 'REMOVE_TAG';
+export const UPDATE_TAG = 'UPDATE_TAG';
+
 /** Category Actions **/
 
 let nextCategoryId = 0
@@ -34,7 +38,7 @@ export const removeCategory = (subpageId, id) => ({
     id,
 });
 
-//TODO: need to figure out if we want to pass more daat to this (apart from just name)
+//TODO: need to figure out if we want to pass more data to this (apart from just name)
 export const updateCategory = (id, name) => ({
     type: UPDATE_CATEGORY_NAME,
     id,
@@ -45,12 +49,13 @@ export const updateCategory = (id, name) => ({
 /** Item Actions **/
 
 let nextItemId = 0
-export const addItem = (categoryId, name, value) => ({
+export const addItem = (categoryId, name, value) => ({ //TODO: do I need to add Tags?
     type: ADD_ITEM,
     id: nextItemId++, // TODO: Should probably be a uuid or something
     categoryId,
     name,
     value,
+    tags: [],
 });
 
 export const removeItem = (categoryId, id) => ({
@@ -59,9 +64,33 @@ export const removeItem = (categoryId, id) => ({
     id,
 });
 
-export const updateItem = (id, name, value) => ({
+export const updateItem = (id, name, value, tags) => ({
     type: UPDATE_ITEM,
     id,
     name,
     value,
+    tags,
+});
+
+
+/** Tag Actions **/
+
+let nextTagId = 0
+export const addTag = (name) => ({
+    type: ADD_TAG,
+    id: nextTagId++, // TODO: Should probably be a uuid or something
+    name,
+    //TODO:: should this include the associated item(s)?
+});
+
+export const removeTag = (id) => ({
+    type: REMOVE_TAG,
+    id,
+});
+
+export const updateTag = (id, name, colour) => ({
+    type: UPDATE_TAG,
+    id,
+    name,
+    colour,
 });
