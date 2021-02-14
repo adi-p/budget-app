@@ -20,7 +20,6 @@ class Tag extends Component {
     }
 
     componentDidUpdate() {
-        // this.focusInput();
     }
 
     render() {

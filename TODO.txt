@@ -65,6 +65,8 @@ MAYBE
     - the add item button is ugly when there are several categories
 - have tool buttons show up on hover
 
+- total doesn't always have the right precision.
+
 - Design
     - Have a "Budget Plan" page -> rough outline of budget goals
         - Have categories and sub categories 

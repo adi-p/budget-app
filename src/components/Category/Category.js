@@ -31,7 +31,6 @@ class Category extends Component {
     }
 
     componentDidUpdate() {
-        this.focusInput();
     }
 
     focusInput() {

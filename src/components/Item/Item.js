@@ -14,17 +14,12 @@ const FIELDS = {
     value: "value",
     tags: "tags",
 }
-//TODO: update/change the focus behaviour for the value field -  the references and referencing by name seem weird to do.
 
 class Item extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            elementToFocusName: `${FIELDS.name}Input`,
-        }
 
         this.nameInput = null;
-        this.valueInput = null;
         this.tagsElement = null;
 
         this.focusInput = this.focusInput.bind(this);
@@ -35,7 +30,6 @@ class Item extends Component {
         this.handleItemChange = this.handleItemChange.bind(this);
         this.handleRemoveItem = this.handleRemoveItem.bind(this);
         this.onValueFocus = this.onValueFocus.bind(this);
-        this.setToEditMode = this.setToEditMode.bind(this);
 
         this.handleAddTag = this.handleAddTag.bind(this);
 
@@ -48,20 +42,13 @@ class Item extends Component {
     }
 
     componentDidUpdate() {
-        this.focusInput();
     }
 
 
-    //set focus to input that was clicked when starting edit
+    //set focus to the name input on creation
     focusInput() {
-        if (this.state.elementToFocusName) {
-            let el = this[this.state.elementToFocusName];
-            if(el) {
-                el.focus();
-                this.setState({
-                    elementToFocusName: '',
-                });
-            }
+        if (this.nameInput) {
+            this.nameInput.focus();
         }
     }
 
@@ -91,12 +78,6 @@ class Item extends Component {
         }
     }
 
-    setToEditMode(elementToFocusName) {
-        this.setState({
-            elementToFocusName: `${elementToFocusName}Input`,
-        })
-    }
-
     renderInputs() {
         let nameElement = (
             <input type="text" name={FIELDS.name} value={this.props.name}
@@ -105,7 +86,6 @@ class Item extends Component {
                 className='textInput'
 
                 onChange={this.handleItemChange}
-                onClick={() => this.setToEditMode(FIELDS.name)}
             />
         );
         let valueElement = (
@@ -115,8 +95,6 @@ class Item extends Component {
                 className='textInput'
 
                 onChange={this.handleItemChange}
-                onClick={() => this.setToEditMode(FIELDS.value)}
-
                 onFocus={this.onValueFocus}
             />
         );
